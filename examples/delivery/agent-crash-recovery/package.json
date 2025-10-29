@@ -1,0 +1,31 @@
+{
+  "name": "delivery-agent-crash-recovery",
+  "version": "1.0.0",
+  "description": "Naylence TypeScript example demonstrating agent crash recovery with durable delivery.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/message-agent.mjs",
+  "scripts": {
+    "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
+    "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
+    "fix-imports": "find dist -name '*.mjs' -exec sed -i '' 's/\\.js/\\.mjs/g' {} \\;",
+    "clean": "rimraf dist",
+    "start": "node dist/sentinel.mjs",
+    "agent": "node dist/message-agent.mjs",
+    "client": "node dist/client.mjs"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "file:../../../../naylence-agent-sdk-ts",
+    "@naylence/runtime": "file:../../../../naylence-runtime-ts",
+    "@naylence/core": "file:../../../../naylence-core-ts",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3",
+    "rimraf": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

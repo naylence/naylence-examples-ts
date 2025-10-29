@@ -34,6 +34,9 @@ const options = {
 // Determine config directory (relative to where script is called from)
 const ROOT_DIR = process.cwd();
 const CONFIG_DIR = resolve(ROOT_DIR, "config");
+const KEEP_CREDENTIALS = process.env.KEEP_CREDENTIALS ?? "true";
+const saveCredentials = KEEP_CREDENTIALS !== "false";
+
 const SECRETS_DIR = options.oauthJson 
   ? resolve(CONFIG_DIR, ".secrets")
   : resolve(CONFIG_DIR, "secrets");
@@ -46,7 +49,7 @@ if (!existsSync(CONFIG_DIR)) {
 }
 
 // Create secrets directory if it doesn't exist
-if (!existsSync(SECRETS_DIR)) {
+if (saveCredentials && !existsSync(SECRETS_DIR)) {
   mkdirSync(SECRETS_DIR, { recursive: true });
 }
 
@@ -130,7 +133,7 @@ for (const templatePath of templates) {
 }
 
 // Generate oauth2-clients.json if requested
-if (options.oauthJson) {
+if (options.oauthJson && saveCredentials) {
   const oauthClientsPath = join(SECRETS_DIR, "oauth2-clients.json");
   const oauthClients = {
     clients: [
@@ -146,17 +149,19 @@ if (options.oauthJson) {
 }
 
 // Write credentials file
-const secretsFile = resolve(SECRETS_DIR, "oauth2-credentials.txt");
-const secretsContent = `OAuth2 Client Credentials (auto-generated)\n` +
-  `==========================================\n` +
-  `CLIENT_ID=${clientId}\n` +
-  `CLIENT_SECRET=${clientSecret}\n` +
-  (hmacSecret ? `HMAC_SECRET=${hmacSecret}\n` : "") +
-  `\n` +
-  `These credentials are shared across all services.\n`;
+if (saveCredentials) {
+  const secretsFile = resolve(SECRETS_DIR, "oauth2-credentials.txt");
+  const secretsContent = `OAuth2 Client Credentials (auto-generated)\n` +
+    `==========================================\n` +
+    `CLIENT_ID=${clientId}\n` +
+    `CLIENT_SECRET=${clientSecret}\n` +
+    (hmacSecret ? `HMAC_SECRET=${hmacSecret}\n` : "") +
+    `\n` +
+    `These credentials are shared across all services.\n`;
 
-writeFileSync(secretsFile, secretsContent, "utf8");
-console.log(`Credentials saved to: ${secretsFile}`);
+  writeFileSync(secretsFile, secretsContent, "utf8");
+  console.log(`Credentials saved to: ${secretsFile}`);
+}
 
 // Summary
 console.log("\n✅ All secrets generated successfully!");
