@@ -1,0 +1,94 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+    - caddy-data:/data:ro
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  # Caddy reverse proxy for TLS termination
+  caddy:
+    image: caddy:2
+    ports: 
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    networks:
+      naylence-net:
+        aliases:
+          - sentinel
+          - oauth2-server
+    healthcheck:
+      test: |
+        sh -c '
+        # Check if certificates exist
+        if [ ! -f "/data/caddy/pki/authorities/local/root.crt" ]; then
+          echo "Root certificate not found"
+          exit 1
+        fi
+        
+        # Ensure certificates have proper permissions for sharing
+        chmod -R 755 /data/caddy/pki/ 2>/dev/null || true
+        
+        echo "Caddy healthy with accessible certificates"
+        '
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  # OAuth2 server for development only - uses naylence-runtime OAuth2 server
+  oauth2-server-internal:
+    <<: *common-base
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/http/oauth2-server-cli.js"]
+    env_file:
+      - config/.env.oauth2-server
+
+  # Sentinel with gated security profile
+  sentinel-internal:
+    <<: *common-base
+    command: ["node", "sentinel.mjs"]
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    depends_on:
+      caddy:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const s = net.connect(8000, 'localhost', () => s.end());"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+      start_interval: 1s
+    env_file:
+      - config/.env.sentinel
+
+  # Math Agent service with direct admission
+  math-agent:
+    <<: *common-base
+    command: ["node", "math-agent.mjs"]
+    depends_on:
+      sentinel-internal:
+        condition: service_healthy
+      caddy:
+        condition: service_healthy
+    environment:
+      - FAME_SHOW_ENVELOPES=true
+    env_file:
+      - config/.env.agent
+
+networks:
+  naylence-net:
+    driver: bridge
+
+volumes:
+  caddy-data:

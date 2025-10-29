@@ -1,0 +1,9 @@
+graph TD
+  C["Client (admission=direct)"] -- "get token" --> O["OAuth2 Server"]
+  A["Agent (admission=direct)"] -- "get token" --> O
+
+  C -- "wss + Bearer" --> R["Caddy - reverse proxy (TLS terminator)"]
+  A -- "wss + Bearer" --> R
+  R -- "ws + Bearer" --> S["Sentinel (security=gated)"] 
+
+  S -->|get public key| O 
