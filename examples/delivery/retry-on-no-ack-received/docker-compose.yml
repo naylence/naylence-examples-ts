@@ -1,0 +1,43 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  environment:
+    - NODE_ENV=production
+    - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  sentinel:
+    <<: *common-base
+    ports:
+      - "8000:8000"
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const client = net.connect({port: 8000}, () => { client.end(); process.exit(0); }); client.on('error', () => { process.exit(1); });"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  message-agent:
+    <<: *common-base
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    env_file:
+      - ./config/.env.agent
+    command: ["node", "--enable-source-maps", "message-agent.mjs"]
+    restart: on-failure
+
+networks:
+  naylence-net:
+    driver: bridge
