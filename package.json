@@ -1,0 +1,52 @@
+{
+  "name": "naylence-examples",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TypeScript examples showcasing Naylence Agent SDK and runtime patterns",
+  "author": "Naylence Dev <naylencedev@gmail.com>",
+  "license": "Apache-2.0",
+  "keywords": [
+    "naylence",
+    "agents",
+    "examples",
+    "typescript",
+    "fame",
+    "sdk"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"examples/**/*.ts\"",
+    "lint:fix": "eslint \"examples/**/*.ts\" --fix",
+    "format": "prettier --write \"examples/**/*.{ts,js,json,md}\"",
+    "format:check": "prettier --check \"examples/**/*.{ts,js,json,md}\"",
+    "example:llm:qa": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx examples/llm/llm-agent.ts",
+    "example:llm:chat": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx examples/llm/chat-agent.ts",
+    "example:simple:function": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/function-as-agent.ts",
+    "example:simple:echo": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/echo-agent.ts",
+    "example:simple:bg-task": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/agent-with-bg-task.ts",
+    "example:simple:rpc": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/rpc-agent.ts",
+    "example:simple:a2a": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/a2a-agent.ts",
+    "example:simple:ping-pong": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/agent-ping-pong.ts",
+    "example:simple:hello": "cross-env FAME_LOG_LEVEL=WARN FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/hello.ts"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.3",
+    "openai": "^4.65.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.12.0",
+    "@types/node": "^22.9.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.12.0",
+    "globals": "^15.10.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.20.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.11.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
