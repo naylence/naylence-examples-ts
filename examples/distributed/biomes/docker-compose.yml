@@ -1,0 +1,104 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  environment:
+    - NODE_ENV=production
+    - FAME_SHOW_ENVELOPES=true
+    - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  networks:
+    - naylence-net
+  restart: unless-stopped
+  stop_signal: SIGINT
+  stop_grace_period: 1s
+
+services:
+  # Main sentinel - runs the central coordinator on port 8000
+  main-sentinel:
+    <<: *common-base
+    ports:
+      - "8000:8000"
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const client = net.connect({port: 8000}, () => { client.end(); process.exit(0); }); client.on('error', () => { process.exit(1); });"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  # Child sentinel 1 - attached to main sentinel
+  child-sentinel1:
+    <<: *common-base
+    depends_on:
+      main-sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://main-sentinel:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+      - FAME_SHOW_ENVELOPES=true
+      - NODE_ENV=production
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const client = net.connect({port: 8000}, () => { client.end(); process.exit(0); }); client.on('error', () => { process.exit(1); });"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  # # Child sentinel 2 - attached to main sentinel
+  child-sentinel2:
+    <<: *common-base
+    depends_on:
+      main-sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://main-sentinel:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+      - FAME_SHOW_ENVELOPES=false
+      - NODE_ENV=production
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const client = net.connect({port: 8000}, () => { client.end(); process.exit(0); }); client.on('error', () => { process.exit(1); });"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  # # Math agent 1 - attached to child-sentinel1
+  math-agent1:
+    <<: *common-base
+    depends_on:
+      child-sentinel1:
+        condition: service_healthy
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://child-sentinel1:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+      - FAME_SHOW_ENVELOPES=true
+      - NODE_ENV=production
+    command: ["node", "--enable-source-maps", "math-agent1.mjs"]
+
+  # # Math agent 2 - attached to child-sentinel2
+  math-agent2:
+    <<: *common-base
+    depends_on:
+      child-sentinel2:
+        condition: service_healthy
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://child-sentinel2:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+      - FAME_SHOW_ENVELOPES=false
+      - NODE_ENV=production
+    command: ["node", "--enable-source-maps", "math-agent2.mjs"]
+
+networks:
+  naylence-net:
+    driver: bridge
