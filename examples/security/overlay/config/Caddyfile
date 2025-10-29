@@ -1,0 +1,9 @@
+localhost:443 sentinel:443 oauth2-server:443 {
+	tls internal
+	@fame path /fame/*
+	@jwks path /.well-known/*
+	@oauth path /oauth/*
+	reverse_proxy @fame sentinel-internal:8000
+	reverse_proxy @jwks oauth2-server-internal:8099
+	reverse_proxy @oauth oauth2-server-internal:8099
+}
