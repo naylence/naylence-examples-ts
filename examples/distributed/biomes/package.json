@@ -1,7 +1,8 @@
 {
   "name": "@naylence-examples/distributed-biomes",
   "version": "0.1.0",
-  "private": true,
+  "description": "Naylence TypeScript example: distributed/biomes",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
@@ -14,6 +15,6 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }

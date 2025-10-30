@@ -1,8 +1,9 @@
 {
   "name": "@naylence-examples/security-advanced",
   "version": "0.1.0",
+  "description": "Naylence TypeScript example: security/advanced",
+  "license": "Apache-2.0",
   "type": "module",
-  "private": true,
   "scripts": {
     "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
     "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "typescript": "^5.7.3",
-    "why-is-node-running": "^3.2.2"
+    "why-is-node-running": "^3.2.2",
+    "@types/node": "^22.10.2"
   }
 }

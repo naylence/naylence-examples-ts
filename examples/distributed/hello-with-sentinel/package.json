@@ -1,9 +1,9 @@
 {
-  "name": "distributed-hello-with-sentinel-example",
-  "version": "1.0.0",
-  "type": "module",
-  "private": true,
+  "name": "@naylence-examples/distributed-hello-with-sentinel",
+  "version": "0.1.0",
   "description": "Distributed hello example with separate sentinel node",
+  "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
     "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
     "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
@@ -17,9 +17,7 @@
     "@naylence/agent-sdk": "^0.3.3"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "typescript": "^5.7.3",
+    "@types/node": "^22.10.2"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "name": "delivery-retry-on-no-ack-received",
-  "version": "1.0.0",
+  "name": "@naylence-examples/delivery-retry-on-no-ack-received",
+  "version": "0.1.0",
   "description": "Naylence TypeScript example demonstrating retry on missing delivery acknowledgments.",
   "license": "Apache-2.0",
   "type": "module",
@@ -18,11 +18,8 @@
     "@naylence/agent-sdk": "^0.3.3"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.2",
     "rimraf": "^6.0.1",
-    "typescript": "^5.6.3"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "typescript": "^5.7.3"
   }
 }

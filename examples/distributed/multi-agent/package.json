@@ -1,8 +1,9 @@
 {
-  "name": "distributed-multi-agent-example",
-  "version": "1.0.0",
-  "type": "module",
+  "name": "@naylence-examples/distributed-multi-agent",
+  "version": "0.1.0",
   "description": "Multi-agent text analysis pipeline demonstrating distributed agent orchestration",
+  "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
     "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
     "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
@@ -13,6 +14,7 @@
     "openai": "^4.73.1"
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3",
+    "@types/node": "^22.10.2"
   }
 }

@@ -1,8 +1,9 @@
 {
-  "name": "distributed-stateful-conversation-example",
-  "version": "1.0.0",
-  "type": "module",
+  "name": "@naylence-examples/distributed-stateful-conversation",
+  "version": "0.1.0",
   "description": "Stateful conversation chat agent example with LLM integration",
+  "license": "Apache-2.0",
+  "type": "module",
   "scripts": {
     "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
     "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
@@ -14,6 +15,6 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }

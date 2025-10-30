@@ -1,6 +1,6 @@
 {
-  "name": "distributed-hello-example",
-  "version": "1.0.0",
+  "name": "@naylence-examples/distributed-hello",
+  "version": "0.1.0",
   "description": "Naylence distributed hello example using TypeScript",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,10 +14,10 @@
     "client": "node dist/client.mjs"
   },
   "dependencies": {
-    "@naylence/agent-sdk": "^0.3.3",
-    "@types/node": "^22.10.2"
+    "@naylence/agent-sdk": "^0.3.3"
   },
-  "engines": {
-    "node": ">=18.0.0"
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.3"
   }
 }
