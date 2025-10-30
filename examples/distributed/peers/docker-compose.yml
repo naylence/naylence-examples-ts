@@ -1,0 +1,90 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+services:
+  peer-sentinel1:
+    image: *base-image
+    ports:
+      - "8000:8000"
+    volumes:
+    - ./dist:/app
+    - /app/node_modules
+    working_dir: /app
+    command: ["node", "peer-sentinel1.mjs"]
+    networks:
+      - naylence-net
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(8000, 'localhost').on('connect', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  peer-sentinel2:
+    image: *base-image
+    depends_on:
+      peer-sentinel1:
+        condition: service_healthy
+    volumes:
+    - ./dist:/app
+    - /app/node_modules
+    working_dir: /app
+    # working_dir: /opt/naylence-runtime-ts
+    command: ["node", "peer-sentinel2.mjs"]
+    networks:
+      - naylence-net
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(8000, 'localhost').on('connect', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://peer-sentinel1:8000/fame/v1/attach/ws/downstream
+      - FAME_PEER_WS_URL=ws://peer-sentinel1:8000/fame/v1/attach/ws/peer
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+
+  math-agent1:
+    image: *base-image
+    volumes:
+    - ./dist:/app
+    - /app/node_modules
+    # working_dir: /opt/naylence-runtime-ts
+    working_dir: /app
+    command: ["node", "math-agent1.mjs"]
+    depends_on:
+      peer-sentinel1:
+        condition: service_healthy
+    networks:
+      - naylence-net
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://peer-sentinel1:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+
+  math-agent2:
+    image: *base-image
+    volumes:
+    - ./dist:/app
+    - /app/node_modules
+    # working_dir: /opt/naylence-runtime-ts
+    command: ["node", "math-agent2.mjs"]
+    depends_on:
+      peer-sentinel2:
+        condition: service_healthy
+    networks:
+      - naylence-net
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://peer-sentinel2:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+
+networks:
+  naylence-net:
+    driver: bridge

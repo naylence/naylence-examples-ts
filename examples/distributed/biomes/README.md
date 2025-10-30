@@ -10,7 +10,7 @@ This example demonstrates a **hierarchical fabric** where a **main (parent) sent
 
 client  →  main sentinel  →  child sentinel 1  →  math-agent1- [ ] Parent + child sentinel configs
 
-                        └→  child sentinel 2  →  math-agent2- [ ] Agent + client scripts
+                         └→  child sentinel 2  →  math-agent2- [ ] Agent + client scripts
 
 ```- [ ] Diagram of envelope flow
 

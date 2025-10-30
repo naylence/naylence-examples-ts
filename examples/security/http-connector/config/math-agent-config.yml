@@ -1,0 +1,28 @@
+node:
+  public_url: ${env:FAME_PUBLIC_URL}
+  listeners:
+    - type: HttpListener
+      port: ${env:FAME_AGENT_PORT}
+  requested_logicals:
+    - fame.fabric
+  security:
+    type: SecurityProfile
+    profile: ${env:FAME_SECURITY_PROFILE}
+  admission:
+    type: DirectAdmissionClient
+    connection_grants:
+      - type: HttpConnectionGrant
+        purpose: "node.attach"
+        url: ${env:FAME_DIRECT_ADMISSION_URL}
+        auth:
+          type: BearerTokenHeaderAuth
+          token_provider:
+            type: OAuth2ClientCredentialsTokenProvider
+            token_url: ${env:FAME_ADMISSION_TOKEN_URL}
+            client_id: ${env:FAME_ADMISSION_CLIENT_ID}
+            client_secret: ${env:FAME_ADMISSION_CLIENT_SECRET}
+            scopes:
+              - node.connect
+            audience: ${env:FAME_JWT_AUDIENCE}
+        ttl: 0
+        durable: false

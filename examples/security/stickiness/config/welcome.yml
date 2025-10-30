@@ -1,0 +1,33 @@
+plugins:
+  - "@naylence/runtime"
+  - "@naylence/advanced-security"
+
+welcome:
+  type: AdvancedWelcomeService
+
+  transport:
+    type: WebSocketTransportProvisioner
+    url: ws://sentinel-internal:8000/fame/v1/attach/ws/downstream
+
+  placement:
+    type: StaticNodePlacementStrategy
+    target_system_id: Cb8WVCC4ML5RsFM
+    target_physical_path: /Cb8WVCC4ML5RsFM
+
+  token_issuer:
+    type: JWTTokenIssuer
+    issuer: https://welcome/fame/welcome
+    audience: fame.fabric
+
+  ca_service_url: https://ca/fame/v1/ca
+
+  authorizer:
+    type: OAuth2Authorizer
+    issuer: https://oauth2-server
+    required_scopes:
+      - node.connect
+    require_scope: true
+    default_ttl_sec: 3600
+    max_ttl_sec: 86400
+    algorithm: EdDSA
+    audience: fame.fabric

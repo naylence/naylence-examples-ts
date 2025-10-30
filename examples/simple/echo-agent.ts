@@ -1,12 +1,6 @@
-import { withFabric, enableLogging, LogLevel } from "@naylence/runtime";
+import { withFabric } from "@naylence/runtime";
 import { Agent, BaseAgent } from "@naylence/agent-sdk";
 import type { FameService } from "@naylence/core";
-
-if (typeof process !== "undefined" && !process.env.FAME_PLUGINS) {
-  process.env.FAME_PLUGINS = "@naylence/runtime";
-}
-
-enableLogging(LogLevel.WARNING);
 
 class EchoAgent extends BaseAgent {
   async runTask(payload: unknown): Promise<unknown> {

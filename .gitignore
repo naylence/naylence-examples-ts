@@ -32,4 +32,17 @@ coverage/
 
 # Env files
 .env
+.env.client
+.env.agent
+.env.sentinel
+**/.env.*.local
+
+**/run*local.sh
+**/*local.yml
+**/*local.ts
+
+**/secrets
+templates
+
+
 

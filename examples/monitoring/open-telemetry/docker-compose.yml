@@ -1,0 +1,131 @@
+x-config: &config
+  version: &base-version "0.3.1"
+  base-image: &base-image naylence-open-telemetry-ts:latest
+
+x-common-base: &common-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: *base-image
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+    - ./config:/etc/otel-config:ro
+    - caddy-data:/data:ro
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    networks:
+      naylence-net:
+        aliases:
+          - sentinel
+          - oauth2-server
+          - otel-collector
+    healthcheck:
+      test: |
+        sh -c '
+        if [ ! -f "/data/caddy/pki/authorities/local/root.crt" ]; then
+          echo "Root certificate not found"
+          exit 1
+        fi
+        chmod -R 755 /data/caddy/pki 2>/dev/null || true
+        wget --no-check-certificate -q --spider https://localhost:443 2>/dev/null || curl -k -f -s https://localhost:443 >/dev/null
+        '
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  oauth2-server-internal:
+    <<: *common-base
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/http/oauth2-server-cli.js"]
+    env_file:
+      - config/.env.oauth2-server
+
+  otel-collector-internal:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./config/otel-collector-config.yml:/etc/otel-collector-config.yml:ro
+      - caddy-data:/data:ro
+    ports:
+      - "14317:4317"
+      - "14318:4318"
+    depends_on:
+      caddy:
+        condition: service_healthy
+      oauth2-server-internal:
+        condition: service_started
+      jaeger:
+        condition: service_started
+    networks:
+      - naylence-net
+    environment:
+      - SSL_CERT_FILE=/data/caddy/pki/authorities/local/root.crt
+
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - naylence-net
+
+  sentinel-internal:
+    <<: *common-base
+    command: ["node", "sentinel.mjs"]
+    depends_on:
+      caddy:
+        condition: service_healthy
+      otel-collector-internal:
+        condition: service_started
+    env_file:
+      - config/.env.sentinel
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test:
+        - "CMD"
+        - "node"
+        - "-e"
+        - >-
+          const net = require('node:net');
+          const socket = net.createConnection(8000, 'localhost', () => { socket.end(); process.exit(0); });
+          socket.on('error', () => process.exit(1));
+          setTimeout(() => process.exit(1), 1000);
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 1s
+
+  math-agent:
+    <<: *common-base
+    command: ["node", "math-agent.mjs"]
+    depends_on:
+      sentinel-internal:
+        condition: service_healthy
+      otel-collector-internal:
+        condition: service_started
+      caddy:
+        condition: service_healthy
+    env_file:
+      - config/.env.agent
+
+volumes:
+  caddy-data:
+
+networks:
+  naylence-net:
+    driver: bridge

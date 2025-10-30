@@ -1,13 +1,6 @@
 import { BaseAgent, NODE_CONFIG } from "@naylence/agent-sdk";
-import {
-  operation,
-  withFabric,
-  basicConfig,
-  LogLevel,
-} from "@naylence/runtime";
+import { operation, withFabric } from "@naylence/runtime";
 import { MATH_AGENT1_ADDR } from "./common.js";
-
-basicConfig({ level: LogLevel.INFO });
 
 class MathAgent extends BaseAgent {
   @operation()

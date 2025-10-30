@@ -1,0 +1,12 @@
+node_modules
+dist
+*.js
+*.js.map
+*.log
+.git
+.gitignore
+README.md
+.npm
+.nyc_output
+coverage
+.coverage

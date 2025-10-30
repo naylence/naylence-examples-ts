@@ -1,0 +1,53 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  environment:
+    - NODE_ENV=production
+    - FAME_LOG_LEVEL=INFO
+    - FAME_SHOW_ENVELOPES=false
+    - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  # Main sentinel - runs the central coordinator on port 8000
+  sentinel:
+    <<: *common-base
+    container_name: capability-routing-sentinel
+    ports:
+      - "8000:8000"
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const client = net.connect({port: 8000}, () => { client.end(); process.exit(0); }); client.on('error', () => { process.exit(1); });"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  # Math agent - attached to sentinel
+  math-agent:
+    <<: *common-base
+    container_name: capability-routing-math-agent
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_ADMISSION_PROFILE=open
+      - FAME_DIRECT_ADMISSION_URL=ws://sentinel:8000/fame/v1/attach/ws/downstream
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+      - FAME_SHOW_ENVELOPES=false
+      - NODE_ENV=production
+    command: ["node", "--enable-source-maps", "math-agent.mjs"]
+
+networks:
+  naylence-net:
+    driver: bridge
+
+

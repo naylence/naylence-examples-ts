@@ -1,0 +1,58 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  environment:
+    - NODE_ENV=production
+    - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  # Sentinel service - runs the central coordinator on port 8000
+  sentinel:
+    <<: *common-base
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - ./data/sentinel:/work/data/sentinel
+    command: ["node", "sentinel.mjs"]
+    ports:
+      - "8000:8000"
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const s = net.connect(8000, 'localhost', () => s.end());"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+      start_interval: 1s
+    env_file:
+      - config/.env.sentinel
+
+  # Storage Agent service - connects to sentinel and provides storage functionality
+  storage-agent:
+    <<: *common-base
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - ./data/agent:/work/data/agent
+    command: ["node", "storage-agent.mjs"]
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    env_file:
+      - config/.env.agent
+
+networks:
+  naylence-net:
+    driver: bridge
+

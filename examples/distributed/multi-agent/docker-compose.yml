@@ -1,0 +1,73 @@
+x-config: &config
+  version: &base-version "0.3.1"
+  base-image: &base-image naylence/agent-sdk-node:0.3.1-openai
+
+x-common-base: &common-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: *base-image
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  networks:
+    - naylence-net
+
+services:
+  # Sentinel service - runs the central coordinator on port 8000
+  sentinel:
+    <<: *common-base
+    command: ["node", "sentinel.mjs"]
+    ports:
+      - "8000:8000"
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const s = net.connect(8000, 'localhost', () => s.end());"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+      start_interval: 1s
+    environment:
+      - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+
+  # Analysis Agent service - orchestrator that coordinates summarizer and sentiment agents
+  analysis-agent:
+    <<: *common-base
+    command: ["node", "analysis-agent.mjs"]
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_DIRECT_ADMISSION_URL=ws://sentinel:8000/fame/v1/attach/ws/downstream
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
+
+  # Sentiment Agent service - analyzes sentiment using OpenAI
+  sentiment-agent:
+    <<: *common-base
+    command: ["node", "sentiment-agent.mjs"]
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_DIRECT_ADMISSION_URL=ws://sentinel:8000/fame/v1/attach/ws/downstream
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
+
+  # Summarizer Agent service - summarizes text using OpenAI
+  summarizer-agent:
+    <<: *common-base
+    command: ["node", "summarizer-agent.mjs"]
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    environment:
+      - FAME_DIRECT_ADMISSION_URL=ws://sentinel:8000/fame/v1/attach/ws/downstream
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
+
+networks:
+  naylence-net:
+    driver: bridge

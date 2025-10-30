@@ -11,7 +11,7 @@ init:
 		cp config/.env.agent.example config/.env.agent; \
 	fi
 
-build:
+build: init
 	npm run build
 
 start: build

@@ -7,10 +7,8 @@
  */
 
 import { BaseAgent, NODE_CONFIG } from "@naylence/agent-sdk";
-import { operation, enableLogging, LogLevel } from "@naylence/runtime";
+import { operation } from "@naylence/runtime";
 import { AGENT_ADDR } from "./common.js";
-
-enableLogging(LogLevel.DEBUG);
 
 /**
  * Math agent providing addition, multiplication, and Fibonacci streaming

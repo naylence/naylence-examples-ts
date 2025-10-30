@@ -1,0 +1,13 @@
+localhost:443 sentinel:443 oauth2-server:443 math-agent:443 {
+	tls internal
+	@math path /fame/v1/ingress/upstream
+	@sentinel_ws path /fame/v1/attach/ws/*
+	@sentinel_http path /fame/v1/ingress/downstream/*
+	@jwks path /.well-known/*
+	@oauth path /oauth/*
+	reverse_proxy @sentinel_ws sentinel-internal:8000
+	reverse_proxy @sentinel_http sentinel-internal:8000
+	reverse_proxy @jwks oauth2-server-internal:8099
+	reverse_proxy @oauth oauth2-server-internal:8099
+	reverse_proxy @math math-agent-internal:8001
+}

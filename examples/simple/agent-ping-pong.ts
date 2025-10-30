@@ -1,9 +1,4 @@
-import {
-  withFabric,
-  enableLogging,
-  LogLevel,
-  FameAddress,
-} from "@naylence/runtime";
+import { withFabric, FameAddress } from "@naylence/runtime";
 import {
   Agent,
   AgentProxy,
@@ -16,12 +11,6 @@ import {
   makeTaskParams,
 } from "@naylence/agent-sdk";
 import type { FameService } from "@naylence/core";
-
-if (typeof process !== "undefined" && !process.env.FAME_PLUGINS) {
-  process.env.FAME_PLUGINS = "@naylence/runtime";
-}
-
-enableLogging(LogLevel.WARNING);
 
 class PongAgent extends BaseAgent {
   async startTask(params: TaskSendParams): Promise<Task> {

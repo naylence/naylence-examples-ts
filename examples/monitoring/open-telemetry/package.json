@@ -1,0 +1,25 @@
+{
+  "name": "@naylence-examples/monitoring-open-telemetry",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
+    "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
+    "fix-imports": "find dist -name '*.mjs' -exec sed -i '' 's/\\.js/\\.mjs/g' {} \\;",
+    "client": "node dist/client.mjs",
+    "sentinel": "node dist/sentinel.mjs",
+    "math-agent": "node dist/math-agent.mjs"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.3",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.205.0",
+    "@opentelemetry/resources": "^2.1.0",
+    "@opentelemetry/sdk-trace-base": "^2.1.0",
+    "@opentelemetry/sdk-trace-node": "^2.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

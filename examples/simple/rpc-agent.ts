@@ -1,12 +1,5 @@
-import {
-  withFabric,
-  enableLogging,
-  LogLevel,
-  operation,
-} from "@naylence/runtime";
-import { Agent, BaseAgent, AgentProxy } from "@naylence/agent-sdk";
-
-enableLogging(LogLevel.WARNING);
+import { withFabric, operation } from "@naylence/runtime";
+import { Agent, BaseAgent } from "@naylence/agent-sdk";
 
 class SimpleAgent extends BaseAgent {
   @operation()

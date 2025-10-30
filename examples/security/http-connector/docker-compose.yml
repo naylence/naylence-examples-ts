@@ -1,0 +1,102 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  environment:
+    - NODE_ENV=production
+    - FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - oauth2-server-internal
+    networks:
+      naylence-net:
+        aliases:
+          - sentinel
+          - math-agent
+          - oauth2-server
+    healthcheck:
+      test: |
+        sh -c '
+        if [ ! -f "/data/caddy/pki/authorities/local/root.crt" ]; then
+          echo "Root certificate not found"
+          exit 1
+        fi
+        chmod -R 755 /data/caddy/pki/ 2>/dev/null || true
+        echo "Caddy healthy with accessible certificates"
+        '
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  oauth2-server-internal:
+    <<: *common-base
+    ports: 
+      - "8099:8099"
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/http/oauth2-server-cli.js"]
+    networks:
+      - naylence-net
+    env_file:
+      - config/.env.oauth2-server
+
+  sentinel-internal:
+    <<: *common-base
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data:ro
+    command: ["node", "--enable-source-maps", "sentinel.mjs"]
+    env_file:
+      - config/.env.sentinel
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "const net=require('net');const client=net.connect({port:8000},()=>{client.end();process.exit(0);});client.on('error',()=>{process.exit(1);});",
+        ]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+
+  math-agent-internal:
+    <<: *common-base
+    depends_on:
+      sentinel-internal:
+        condition: service_healthy
+      caddy:
+        condition: service_healthy
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - ./config/math-agent-config.yml:/etc/fame/fame-config.yml:ro
+      - caddy-data:/data:ro
+    command: ["node", "--enable-source-maps", "math-agent.mjs"]
+    env_file:
+      - config/.env.agent
+
+networks:
+  naylence-net:
+    driver: bridge
+
+volumes:
+  caddy-data:

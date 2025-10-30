@@ -1,0 +1,9 @@
+ca:
+  authorizer:
+    type: OAuth2Authorizer
+    issuer: https://welcome/fame/welcome
+    require_scope: false
+    default_ttl_sec: 3600
+    max_ttl_sec: 86400
+    algorithm: EdDSA
+    audience: ca

@@ -1,0 +1,25 @@
+{
+  "name": "distributed-cancellable-example",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Distributed cancellable agent example demonstrating A2A task cancellation",
+  "scripts": {
+    "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
+    "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
+    "fix-imports": "find dist -name '*.mjs' -exec sed -i '' 's/\\.js/\\.mjs/g' {} \\;",
+    "clean": "rm -rf dist",
+    "start:sentinel": "npm run build && node dist/sentinel.mjs",
+    "start:agent": "npm run build && node dist/cancellable-agent.mjs",
+    "start:client": "npm run build && node dist/client.mjs"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

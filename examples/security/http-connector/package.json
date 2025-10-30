@@ -1,0 +1,28 @@
+{
+  "name": "security-http-connector",
+  "version": "1.0.0",
+  "description": "Naylence TypeScript example demonstrating the HTTP connector with reverse authorization callbacks.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/math-agent.mjs",
+  "scripts": {
+    "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
+    "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
+    "fix-imports": "find dist -name '*.mjs' -exec sed -i '' 's/\\.js/\\.mjs/g' {} \\;",
+    "clean": "rimraf dist",
+    "start": "node dist/sentinel.mjs",
+    "agent": "node dist/math-agent.mjs",
+    "client": "node dist/client.mjs"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

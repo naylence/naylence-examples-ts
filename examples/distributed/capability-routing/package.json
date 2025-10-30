@@ -1,0 +1,22 @@
+{
+  "name": "@naylence-examples/distributed-capability-routing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc && npm run rename-to-mjs && npm run fix-imports",
+    "rename-to-mjs": "find dist -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.mjs\"' _ {} \\;",
+    "fix-imports": "find dist -name '*.mjs' -exec sed -i '' 's/\\.js/\\.mjs/g' {} \\;",
+    "math-agent": "node dist/math-agent.mjs",
+    "client": "node dist/client.mjs",
+    "sentinel": "node dist/sentinel.mjs",
+    "clean": "rm -rf dist node_modules package-lock.json"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

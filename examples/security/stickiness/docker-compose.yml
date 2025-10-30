@@ -1,0 +1,146 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-adv-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+    - caddy-data:/data
+    - ./config/certs:/etc/fame/certs:ro
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      ca-internal:
+        condition: service_started
+      oauth2-server-internal:
+        condition: service_started
+      welcome-internal:
+        condition: service_started
+    networks:
+      naylence-net:
+        aliases:
+          - sentinel
+          - oauth2-server
+          - welcome
+          - ca
+    healthcheck:
+      test: |
+        sh -c '
+        if [ ! -f "/data/caddy/pki/authorities/local/root.crt" ]; then
+          echo "Root certificate not found"
+          exit 1
+        fi
+        chmod -R 755 /data/caddy/pki/ 2>/dev/null || true
+        echo "Caddy healthy with accessible certificates"
+        '
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  oauth2-server-internal:
+    <<: *common-base
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/http/oauth2-server-cli.js"]
+    env_file:
+      - config/.env.oauth2-server
+
+  ca-internal:
+    <<: *common-base
+    command: ["node", "/app/node_modules/@naylence/advanced-security/dist/esm/naylence/fame/security/cert/ca-server.js"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+      - .:/work:ro
+      - ./config/ca.yml:/etc/fame/fame-config.yml:ro
+    env_file:
+      - config/.env.ca
+
+  welcome-internal:
+    <<: *common-base
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/welcome/node-welcome-server.js"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+      - .:/work:ro
+      - ./config/welcome.yml:/etc/fame/fame-config.yml:ro
+    env_file:
+      - config/.env.welcome
+
+  sentinel-internal:
+    <<: *common-base
+    command: ["node", "sentinel.mjs"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+    depends_on:
+      caddy:
+        condition: service_healthy
+      oauth2-server-internal:
+        condition: service_started
+      welcome-internal:
+        condition: service_started
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    healthcheck:
+      test: ["CMD", "node", "-e", "const net = require('net'); const s = net.connect(8000, 'localhost', () => s.end());"]
+      interval: 0.5s
+      timeout: 1s
+      retries: 10
+      start_period: 0.5s
+      start_interval: 1s
+    env_file:
+      - config/.env.sentinel
+
+  math-agent-replica1:
+    <<: *common-base
+    command: ["node", "math-agent.mjs"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+    depends_on:
+      sentinel-internal:
+        condition: service_healthy
+    env_file:
+      - config/.env.agent
+
+  math-agent-replica2:
+    <<: *common-base
+    command: ["node", "math-agent.mjs"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+    depends_on:
+      sentinel-internal:
+        condition: service_healthy
+    env_file:
+      - config/.env.agent
+
+networks:
+  naylence-net:
+    driver: bridge
+
+volumes:
+  caddy-data:

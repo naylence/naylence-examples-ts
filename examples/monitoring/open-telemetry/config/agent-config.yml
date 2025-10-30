@@ -1,0 +1,40 @@
+node:
+  type: Node
+
+  id: "${env:FAME_NODE_ID:}"
+
+  public_url: "${env:FAME_PUBLIC_URL:}"
+
+  requested_logicals:
+    - fame.fabric
+
+  security:
+    type: SecurityProfile
+    profile: "${env:FAME_SECURITY_PROFILE:open}"
+
+  admission:
+    type: AdmissionProfile
+    profile: "${env:FAME_ADMISSION_PROFILE:open}"
+
+  storage:
+    type: StorageProfile
+    profile: "${env:STORAGE_PROFILE:memory}"
+
+  delivery:
+    type: DeliveryProfile
+    profile: ${env:FAME_DELIVERY_PROFILE:at-most-once}
+
+  telemetry:
+    type: OpenTelemetryTraceEmitter
+    service_name: naylence-telemetry
+    endpoint: "${env:FAME_TELEMETRY_OTLP_ENDPOINT:}"
+    auth:
+      type: BearerTokenHeaderAuth
+      token_provider:
+        type: OAuth2ClientCredentialsTokenProvider
+        token_url: ${env:FAME_TELEMETRY_TOKEN_URL}
+        client_id: ${env:FAME_TELEMETRY_CLIENT_ID}
+        client_secret: ${env:FAME_TELEMETRY_CLIENT_SECRET}
+        scopes:
+          - node.connect
+        audience: ${env:FAME_TELEMETRY_JWT_AUDIENCE}

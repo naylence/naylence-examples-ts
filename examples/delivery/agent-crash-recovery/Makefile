@@ -5,7 +5,7 @@ init:
 	@echo "Installing dependencies..."
 	npm install
 	@echo "Generating local configuration and secrets..."
-	node ../../../scripts/generate-secrets.mjs
+	@KEEP_CREDENTIALS=false node ../../../scripts/generate-secrets.mjs
 	@mkdir -p data/agent
 
 build: init

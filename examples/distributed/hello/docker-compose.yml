@@ -1,0 +1,28 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-node:0.3.3
+
+services:
+  echo-agent:
+    image: *base-image
+    command: ["node", "--enable-source-maps", "echo-agent.mjs"]
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - FAME_PLUGINS=@naylence/runtime
+      - SENTINEL_HTTP_PORT=8000
+      - SENTINEL_WS_PORT=8000
+    volumes:
+      # Mount the compiled JavaScript files
+      - ./dist:/app
+      # Preserve node_modules from the base image (prevents it from being hidden by the mount)
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - naylence-net
+
+networks:
+  naylence-net:
+    driver: bridge

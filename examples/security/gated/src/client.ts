@@ -1,17 +1,6 @@
-/**
- * Client demonstrating OAuth2-gated admission to Naylence fabric
- *
- * This client:
- * 1. Fetches an OAuth2 bearer token using client credentials
- * 2. Connects to the sentinel using the token
- * 3. Makes RPC calls to the math agent
- */
-
 import { Agent, CLIENT_CONFIG } from "@naylence/agent-sdk";
-import { withFabric, enableLogging, LogLevel } from "@naylence/runtime";
+import { withFabric } from "@naylence/runtime";
 import { AGENT_ADDR } from "./common.js";
-
-// enableLogging(LogLevel.WARNING);
 
 async function main(): Promise<void> {
   await withFabric({ rootConfig: CLIENT_CONFIG }, async () => {

@@ -1,0 +1,124 @@
+x-config: &config
+  version: &base-version "0.3.3"
+  base-image: &base-image naylence/agent-sdk-adv-node:0.3.3
+
+x-common-base: &common-base
+  image: *base-image
+  volumes:
+    - ./dist:/app
+    - /app/node_modules
+    - caddy-data:/data
+    - ./config/certs:/etc/fame/certs:ro
+  working_dir: /app
+  networks:
+    - naylence-net
+  restart: unless-stopped
+
+volumes:
+  caddy-data:
+
+services:
+  # Sentinel reverse proxy
+  caddy:
+    image: caddy:2
+    ports: 
+      - "8443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      oauth2-server-internal:
+        condition: service_started
+      welcome-internal:
+        condition: service_started
+      ca-internal:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "sh", "-c", "test -f /data/caddy/pki/authorities/local/root.crt && ([ \"$(stat -c '%a' /data/caddy/pki/authorities/local/root.crt)\" = \"644\" ] || chmod -R a+rX /data/caddy/pki) && echo '' | nc -w 1 localhost 443"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 15s
+    networks:
+      naylence-net:
+        aliases:
+          - sentinel
+          - oauth2-server
+          - welcome
+          - ca
+
+  # OAuth2 server - shouldn't be connected to directly.
+  # This is for dev purposes only, do not use in production
+  oauth2-server-internal:
+    <<: *common-base
+    ports: 
+      - "8099:8099"
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/http/oauth2-server-cli.js"]
+    env_file:
+      - config/.env.oauth2-server
+
+  ca-internal:
+    <<: *common-base
+    ports: 
+      - "8098:8098"
+    command: ["node", "/app/node_modules/@naylence/advanced-security/dist/esm/naylence/fame/security/cert/ca-server.js"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+      - .:/work:ro
+      - ./config/ca.yml:/etc/fame/fame-config.yml:ro
+    env_file:
+      - config/.env.ca
+
+  welcome-internal:
+    <<: *common-base
+    ports: 
+      - "8090:8090"
+    command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/welcome/node-welcome-server.js"]
+    volumes:
+      - ./dist:/app
+      - /app/node_modules
+      - caddy-data:/data
+      - ./config/certs:/etc/fame/certs:ro
+      - .:/work:ro
+      - ./config/welcome.yml:/etc/fame/fame-config.yml:ro
+    env_file:
+      - config/.env.welcome
+
+  sentinel-internal:
+    <<: *common-base
+    command: ["node", "sentinel.mjs"]
+    depends_on:
+      caddy:
+        condition: service_healthy
+      oauth2-server-internal:
+        condition: service_started
+      welcome-internal:
+        condition: service_started
+    ports:
+      - "8000:8000"
+    stop_signal: SIGINT
+    stop_grace_period: 1s
+    env_file:
+      - config/.env.sentinel
+
+  math-agent:
+    <<: *common-base
+    command: ["node", "math-agent.mjs"]
+    depends_on:
+      caddy:
+        condition: service_healthy
+      sentinel-internal:
+        condition: service_started
+      oauth2-server-internal:
+        condition: service_started
+      welcome-internal:
+        condition: service_started
+    env_file:
+      - config/.env.agent
+
+networks:
+  naylence-net:
+    driver: bridge

@@ -1,151 +1,122 @@
-# Gated Admission Example — OAuth2 Auth (No Overlay Encryption)
+# Gated Admission with OAuth2
 
-This example demonstrates how to protect a Naylence fabric using **OAuth2 client-credentials** admission with **security profiles** and **admission profiles**. A sentinel validates bearer tokens issued by a local OAuth2 server, gating access to agents and clients. Transport TLS is terminated by **Caddy**, and Naylence's overlay encryption is **not enabled** in this example.
-
-> **📝 Note:** This is the **TypeScript/Node.js** version. A Python version is available in `naylence-examples-python/examples/security/gated`.
-
-## Architecture diagram
-
-![Architecture diagram](docs/diagram.png)
-
-> ⚠️ **Security scope:** This example focuses only on **admission/auth** using OAuth2 tokens. TLS is handled by Caddy (reverse proxy). Naylence overlay encryption (message-level) is not used here. The included OAuth2 server is a **dev-only utility**; do not use it in production.
+Demonstrates **gated admission** using **OAuth2 client credentials flow** to control access to the Naylence fabric. The sentinel validates bearer tokens before allowing agents and clients to attach.
 
 ---
 
-## What you'll learn
+## Overview
 
-- Running a Naylence **sentinel** with `security profile = gated`.
-- Running a Naylence **agent** with `admission profile = direct` (connects to sentinel using a JWT).
-- Running a Naylence **client** with `admission profile = direct`.
-- Using a simple OAuth2 server (Node.js implementation) to issue tokens for both agents and clients.
-- Configuring security and admission with **profiles** instead of raw config.
+This example shows how to implement **admission-level security** using OAuth2. The sentinel runs in **gated** security profile and validates JWT bearer tokens issued by an OAuth2 authorization server before granting access to the fabric.
 
----
+**Security Scope:**
 
-## Why so many files?
+- **Admission/Authentication**: OAuth2 client credentials for fabric access
+- **No Overlay Encryption**: Communication within the fabric is not encrypted (see `overlay` or `strict-overlay` examples for that)
 
-You'll notice this example has more moving parts than the earlier ones. In practice, we could have just checked demo credentials straight into git and everything would work out-of-the-box.
+**Architecture:**
 
-We deliberately chose not to do that. Even though these credentials would only ever be test values, checking secrets into version control is a bad security practice. To stay true to Naylence's security philosophy, we instead generate unique credentials at setup time and distribute them into the appropriate .env.\* files.
+```
+┌──────────────┐     OAuth2 Token      ┌──────────────────┐
+│   Client     │────────────────────────▶│ OAuth2 Server    │
+└──────┬───────┘                        └──────────────────┘
+       │                                         │
+       │ Token                                   │ JWKS
+       ▼                                         ▼
+┌──────────────┐       TLS Termination    ┌──────────────┐
+│   Sentinel   │◀────────(Caddy)──────────│ Sentinel     │
+│   (gated)    │                          │  (internal)  │
+└──────┬───────┘                          └──────────────┘
+       │                                         │
+       │ Authenticated                           │
+       ▼                                         ▼
+┌──────────────┐                          ┌──────────────┐
+│  Math Agent  │                          │ Math Agent   │
+│  (direct)    │                          │  (internal)  │
+└──────────────┘                          └──────────────┘
+```
 
-That decision adds a few extra files, but it also keeps the example aligned with real-world security hygiene:
+**Components:**
 
-- No static secrets in git
-
-- Clear separation of roles (client, agent, sentinel, OAuth2 server)
-
-- Automation via Make/generator script so you don't have to manage values by hand
-
----
-
-## Components
-
-- **docker-compose.yml** — runs all long-lived services:
-  - **caddy** — reverse proxy, terminates TLS with internal CA.
-  - **oauth2-server-internal** — dev-only OAuth2 provider (Node.js, client credentials flow).
-  - **sentinel-internal** — Naylence fabric sentinel (`security profile = gated`).
-  - **math-agent** — example agent (same RPC agent as in the distributed RPC example), configured with `admission profile = direct`.
-
-- **src/client.ts** — TypeScript client, authenticates via OAuth2 and connects to the sentinel.
-- **config/.env.client** — holds client configuration (token URL, client ID/secret, admission URL, CA cert).
-
-**Profiles in use:**
-
-- Sentinel: `FAME_SECURITY_PROFILE=gated`
-- Agent: `FAME_ADMISSION_PROFILE=direct`
-- Client: `FAME_ADMISSION_PROFILE=direct`
-
-**Logical address**: `math@fame.fabric` (same as RPC example).
+- **Caddy**: TLS reverse proxy (terminates HTTPS/WSS)
+- **OAuth2 Server**: Development-only token issuer (do NOT use in production)
+- **Sentinel**: Gated admission with JWT validation
+- **Math Agent**: Connects using OAuth2 client credentials (direct admission profile)
+- **Client**: Fetches token and calls agent via sentinel
 
 ---
 
-## Quick start
+## Prerequisites
 
-### Using Make (Recommended)
+- Node.js 18+ with TypeScript support
+- Docker and Docker Compose
+- `tsx` installed globally (`npm install -g tsx`) or available in local dependencies
+- Basic understanding of OAuth2 client credentials flow
 
-The easiest way to run this example is using the provided Makefile, which automates the entire workflow:
+---
+
+## Setup
+
+### 1. Generate Secrets and Configuration
+
+Run the initialization script to create OAuth2 client credentials and `.env` files:
+
+```bash
+make init
+```
+
+This generates:
+
+- `config/.env.oauth2-server` – OAuth2 server signing keys and client credentials
+- `config/.env.sentinel` – Sentinel JWT validation settings
+- `config/.env.agent` – Agent OAuth2 client credentials (injected from `DEV_CLIENT_*`)
+- `config/.env.client` – Client OAuth2 client credentials (injected from `DEV_CLIENT_*`)
+
+**Note:** The generated client ID/secret are for **development only** and should never be used in production.
+
+### 2. Build the TypeScript Code
+
+Compile the example code to JavaScript:
+
+```bash
+make build
+```
+
+This runs `tsc` and outputs to the `dist/` directory.
+
+---
+
+## Running the Example
+
+### Start Infrastructure
+
+Start all services (Caddy, OAuth2 server, sentinel, math-agent):
 
 ```bash
 make start
-make run
 ```
 
-**Build and run workflow:**
+This runs:
 
-```bash
-# Generate secrets and start services
-make start
+- **Caddy**: TLS termination on port 443 with internal CA
+- **OAuth2 Server**: Development token issuer with JWKS endpoint
+- **Sentinel**: Gated admission with JWT validation (internal port 8000)
+- **Math Agent**: Connects using OAuth2 credentials
 
-# In another terminal, run the client
-make run
-```
+**Health Checks:**
 
-**Why use Make?**
+- Caddy waits for certificates to be generated and accessible
+- Sentinel waits for Caddy to be healthy
+- Math Agent waits for both Caddy and Sentinel to be healthy
 
-- **Automated setup**: No manual configuration of credentials or environment files
-- **Consistent secrets**: Ensures all services use the same generated client ID and secret
-- **Streamlined workflow**: Complete end-to-end demonstration with simple commands
-- **Error prevention**: Eliminates common setup mistakes like mismatched credentials
+### Run the Client
 
-**Other Make targets:**
-
-```bash
-make init        # Generate secrets and .env files only
-make build       # Build Docker image
-make start       # Start Docker services (includes init)
-make run         # Run the TypeScript client
-make run-verbose # Run the TypeScript client with debug logging
-make stop        # Stop Docker services
-make clean       # Remove generated files and secrets
-```
-
-### Manual setup (Alternative)
-
-If you prefer to run steps manually:
-
-1. **Generate secrets and environment files**
-
-```bash
-node scripts/generate-secrets.mjs
-```
-
-This creates:
-
-- `config/.env.client`, `config/.env.agent`, `config/.env.oauth2-server`, `config/.env.sentinel` with unique credentials
-- `config/secrets/oauth2-credentials.txt` with OAuth2 client configuration
-
-2. **Start services**
-
-```bash
-docker compose up -d
-```
-
-This brings up Caddy (TLS), OAuth2 server (Node.js), sentinel (gated), and the math agent (direct admission).
-
-3. **Run the client**
+Execute the client to fetch a token and make RPC calls:
 
 ```bash
 make run
 ```
 
-or
-
-```bash
-docker compose run --rm \
-  -v caddy-data:/data/caddy:ro \
-  --env-file=config/.env.client \
-  naylence \
-  node gated/client.mjs
-```
-
-The client will:
-
-- Load configuration from `config/.env.client`.
-- Fetch a bearer token from the OAuth2 dev server (using client credentials).
-- Connect to the sentinel at `wss://localhost/fame/v1/attach/ws/downstream`.
-- Call the math agent's RPCs.
-
-### Example output
+**Expected Output:**
 
 ```
 7
@@ -153,145 +124,334 @@ The client will:
 0 1 1 2 3 5 8 13 21 34
 ```
 
-3. **Stop services**
+This shows:
+
+1. `add(3, 4)` → `7`
+2. `multiply(6, 7)` → `42`
+3. `fib_stream(10)` → Fibonacci sequence
+
+### Run with Verbose Logging
+
+For detailed admission and JWT validation logs:
 
 ```bash
-docker compose down --remove-orphans
-# or
-make stop
+make run-verbose
 ```
+
+This shows:
+
+- OAuth2 token request/response
+- JWT validation (signature, issuer, audience, expiration)
+- Envelope routing through the fabric
 
 ---
 
-## Client env vars reference (config/.env.client)
+## Code Structure
 
-Example `config/.env.client`:
+### Python vs TypeScript
 
-```ini
-FAME_ADMISSION_PROFILE=direct
-FAME_DIRECT_ADMISSION_URL=wss://localhost/fame/v1/attach/ws/downstream
-FAME_ADMISSION_TOKEN_URL=https://localhost/oauth/token
-FAME_ADMISSION_CLIENT_ID=<YOUR_TEST_CLIENT_ID>
-FAME_ADMISSION_CLIENT_SECRET=<YOUR_TEST_CLIENT_SECRET>
-FAME_JWT_AUDIENCE=fame.fabric
-SSL_CERT_FILE=/data/caddy/pki/authorities/local/root.crt
-```
+| **Aspect**              | **Python**                                     | **TypeScript**                                 |
+| ----------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| **Agent Definition**    | `class MathAgent(BaseAgent)`                   | `class MathAgent extends BaseAgent`            |
+| **Operation Decorator** | `@operation()`                                 | `@operation()`                                 |
+| **Streaming**           | `@operation(streaming=True)`                   | `@operation({ streaming: true })`              |
+| **RPC Call**            | `await agent.add(x=3, y=4)`                    | `await agent.add({ x: 3, y: 4 })`              |
+| **Config**              | `SENTINEL_CONFIG`, `NODE_CONFIG`               | `SENTINEL_CONFIG`, `NODE_CONFIG`               |
+| **Admission Profile**   | `FAME_ADMISSION_PROFILE=direct`                | `FAME_ADMISSION_PROFILE=direct`                |
+| **JWT Validation**      | `FAME_JWT_TRUSTED_ISSUER`, `FAME_JWT_AUDIENCE` | `FAME_JWT_TRUSTED_ISSUER`, `FAME_JWT_AUDIENCE` |
 
-- **FAME_ADMISSION_PROFILE** — admission mode (`direct` means connect directly to sentinel using a JWT).
-- **FAME_DIRECT_ADMISSION_URL** — sentinel attach URL (through Caddy).
-- **FAME_ADMISSION_TOKEN_URL** — OAuth2 server token endpoint.
-- **FAME_ADMISSION_CLIENT_ID/SECRET** — OAuth2 client credentials.
-- **FAME_JWT_AUDIENCE** — must match sentinel's trusted audience.
-- **SSL_CERT_FILE** — path to Caddy's internal root CA cert (mounted from Docker volume).
+### TypeScript-Specific Details
 
----
-
-## Agent env vars reference (config/.env.agent)
-
-The agent uses the **same variables as the client**, but since it runs inside Docker Compose, the values reference internal service names:
-
-```ini
-SSL_CERT_FILE=/data/caddy/pki/authorities/local/root.crt
-FAME_DIRECT_ADMISSION_URL=wss://sentinel-internal/fame/v1/attach/ws/downstream
-FAME_ADMISSION_PROFILE=direct
-FAME_ADMISSION_TOKEN_URL=https://oauth2-server-internal/oauth/token
-FAME_ADMISSION_CLIENT_ID=<YOUR_TEST_CLIENT_ID>
-FAME_ADMISSION_CLIENT_SECRET=<YOUR_TEST_CLIENT_SECRET>
-FAME_JWT_AUDIENCE=fame.fabric
-```
-
----
-
-## Dev OAuth2 server env vars reference (config/.env.oauth2-server)
-
-```ini
-FAME_JWT_ISSUER=https://oauth2-server-internal
-FAME_JWT_CLIENT_ID=<YOUR_TEST_CLIENT_ID>
-FAME_JWT_CLIENT_SECRET=<YOUR_TEST_CLIENT_SECRET>
-FAME_JWT_AUDIENCE=fame.fabric
-```
-
-**Implementation note:** The TypeScript version includes a minimal Node.js HTTP server (`src/oauth2-server.ts`) that implements the OAuth2 client credentials flow. This is a **development-only** replacement for the Python runtime's built-in `python -m naylence.fame.fastapi.oauth2_server` module.
-
----
-
-## Sentinel env vars reference (config/.env.sentinel)
-
-The sentinel does not connect upstream, but it enforces gated security:
-
-```ini
-SSL_CERT_FILE=/data/caddy/pki/authorities/local/root.crt
-FAME_SECURITY_PROFILE=gated
-FAME_JWT_TRUSTED_ISSUER=https://oauth2-server-internal
-FAME_JWT_AUDIENCE=fame.fabric
-```
-
----
-
-## TypeScript-specific implementation details
-
-### OAuth2 Server (Node.js)
-
-The TypeScript version implements a minimal OAuth2 server using Node.js's built-in `http` module:
+**Math Agent** (`src/math-agent.ts`):
 
 ```typescript
-// src/oauth2-server.ts
-import { createServer } from "node:http";
-import { createHmac, randomBytes } from "node:crypto";
+class MathAgent extends BaseAgent {
+  @operation()
+  async add(params: { x: number; y: number }): Promise<number> {
+    return params.x + params.y;
+  }
 
-// Issues JWT tokens with HS256 signatures
-// Exposes /oauth/token and /.well-known/jwks.json endpoints
-// Configured via environment variables
+  @operation({ name: "multiply" })
+  async multi(params: { x: number; y: number }): Promise<number> {
+    return params.x * params.y;
+  }
+
+  @operation({ name: "fib_stream", streaming: true })
+  async *fib(params: { n: number }): AsyncGenerator<number> {
+    let a = 0,
+      b = 1;
+    for (let i = 0; i < params.n; i++) {
+      yield a;
+      [a, b] = [b, a + b];
+    }
+  }
+}
+
+await new MathAgent().aserve(AGENT_ADDR, { rootConfig: NODE_CONFIG });
 ```
 
-This server:
-
-- Implements OAuth2 client credentials grant type
-- Generates JWT tokens with `iss`, `sub`, `aud`, `exp`, `iat` claims
-- Uses HS256 (HMAC-SHA256) for token signing
-- Provides JWKS endpoint for public key discovery
-
-**⚠️ Development only:** This OAuth2 implementation is for testing and demonstration. Production deployments should use established identity providers like Keycloak, Auth0, or Okta.
-
-### Client Configuration
-
-The TypeScript client uses the `CLIENT_CONFIG` factory from `naylence-agent-sdk`:
+**Client** (`src/client.ts`):
 
 ```typescript
-import { Agent, CLIENT_CONFIG } from "@naylence/agent-sdk";
-import { withFabric } from "@naylence/runtime";
-
 await withFabric({ rootConfig: CLIENT_CONFIG }, async () => {
-  const agent = Agent.remoteByAddress("math@fame.fabric");
+  const agent = Agent.remoteByAddress(AGENT_ADDR);
+
   const sum = await agent.add({ x: 3, y: 4 });
   console.log(sum);
+
+  const fibStream = await agent.fib_stream({ _stream: true, n: 10 });
+  for await (const num of fibStream) {
+    // Process stream
+  }
 });
 ```
 
-The `CLIENT_CONFIG` factory automatically:
+**Sentinel** (`src/sentinel.ts`):
 
-- Reads environment variables for OAuth2 configuration
-- Acquires bearer tokens using client credentials
-- Injects tokens into connection grants for admission
-- Manages TLS certificate validation
+```typescript
+await Sentinel.aserve({
+  rootConfig: SENTINEL_CONFIG,
+  logLevel: "info",
+});
+```
 
 ---
 
-## Notes
+## Security Configuration
 
-- The OAuth2 server included here is for **development only**. In production, use a real identity provider (Keycloak, Auth0, Okta, etc.).
-- Always run Caddy (or another reverse proxy) for TLS termination; Naylence does **not** provide TLS itself.
-- Overlay encryption (end-to-end message security) is a separate layer, demonstrated in later examples.
+### Sentinel Configuration (`.env.sentinel`)
+
+```bash
+FAME_SECURITY_PROFILE=gated
+FAME_JWT_TRUSTED_ISSUER=https://oauth2-server
+FAME_JWT_AUDIENCE=fame.fabric
+FAME_JWT_ALGORITHM=EdDSA
+```
+
+**Key Settings:**
+
+- `FAME_SECURITY_PROFILE=gated`: Requires valid JWT for admission
+- `FAME_JWT_TRUSTED_ISSUER`: OAuth2 server URL (must match token `iss` claim)
+- `FAME_JWT_AUDIENCE`: Required audience in token (`aud` claim)
+- `FAME_JWT_ALGORITHM=EdDSA`: Token signing algorithm (Ed25519)
+
+### Agent/Client Configuration (`.env.agent`, `.env.client`)
+
+```bash
+FAME_ADMISSION_PROFILE=direct
+FAME_DIRECT_ADMISSION_URL=wss://sentinel/fame/v1/attach/ws/downstream
+FAME_ADMISSION_TOKEN_URL=https://oauth2-server/oauth/token
+FAME_ADMISSION_CLIENT_ID=${DEV_CLIENT_ID}
+FAME_ADMISSION_CLIENT_SECRET=${DEV_CLIENT_SECRET}
+```
+
+**Key Settings:**
+
+- `FAME_ADMISSION_PROFILE=direct`: Connect directly to sentinel with OAuth2
+- `FAME_DIRECT_ADMISSION_URL`: Sentinel WebSocket endpoint (via Caddy TLS)
+- `FAME_ADMISSION_TOKEN_URL`: OAuth2 token endpoint
+- `FAME_ADMISSION_CLIENT_ID`/`FAME_ADMISSION_CLIENT_SECRET`: Injected from generated secrets
+
+### TLS Certificate Handling
+
+**Node.js requires explicit CA certificate configuration:**
+
+```bash
+NODE_EXTRA_CA_CERTS=/data/caddy/pki/authorities/local/root.crt
+SSL_CERT_FILE=/data/caddy/pki/authorities/local/root.crt
+```
+
+**Why both variables?**
+
+- `NODE_EXTRA_CA_CERTS`: Node.js native TLS/HTTPS
+- `SSL_CERT_FILE`: Some libraries (e.g., `node-fetch`, certificate utilities)
+
+---
+
+## OAuth2 Flow
+
+### 1. Client Credentials Grant
+
+The agent/client automatically fetches a token before connecting:
+
+```
+POST https://oauth2-server/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_id=${DEV_CLIENT_ID}
+&client_secret=${DEV_CLIENT_SECRET}
+&scope=fame.fabric
+```
+
+**Response:**
+
+```json
+{
+  "access_token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+### 2. JWT Validation
+
+The sentinel validates the token:
+
+**Claims Checked:**
+
+- `iss`: Must match `FAME_JWT_TRUSTED_ISSUER`
+- `aud`: Must match `FAME_JWT_AUDIENCE`
+- `exp`: Token must not be expired
+- **Signature**: Verified using JWKS from `https://oauth2-server/.well-known/jwks.json`
+
+### 3. Fabric Admission
+
+Once validated, the agent/client is admitted to the fabric and can communicate with other agents.
 
 ---
 
 ## Troubleshooting
 
-- **401 Unauthorized** — check that client/agent ID & secret match OAuth2 server config; verify `FAME_JWT_AUDIENCE` matches sentinel's config.
-- **TLS errors** — confirm `SSL_CERT_FILE` points to Caddy's root CA cert (mounted at `/data/caddy/pki/authorities/local/root.crt`).
-- **WS connection refused** — ensure Docker Compose is up; Caddy listens on `443`.
-- **Module not found** — ensure you've built the TypeScript code with `npm run build` or the Docker image contains compiled `.mjs` files.
+### Certificate Errors
+
+**Issue:** `UNABLE_TO_VERIFY_LEAF_SIGNATURE` or `DEPTH_ZERO_SELF_SIGNED_CERT`
+
+**Fix:** Ensure Caddy is healthy and certificates are accessible:
+
+```bash
+docker compose logs caddy
+docker compose exec caddy ls -la /data/caddy/pki/authorities/local/
+```
+
+The `caddy` service healthcheck ensures certificates exist and have proper permissions before other services start.
+
+### Token Validation Failures
+
+**Issue:** `Invalid issuer` or `Invalid audience`
+
+**Check:**
+
+1. Ensure `.env.sentinel` has correct `FAME_JWT_TRUSTED_ISSUER` (must match token `iss`)
+2. Verify `.env.agent`/`.env.client` use `FAME_JWT_AUDIENCE=fame.fabric`
+3. Check OAuth2 server logs: `docker compose logs oauth2-server-internal`
+
+### Connection Refused
+
+**Issue:** Client cannot connect to sentinel
+
+**Debug:**
+
+```bash
+# Check sentinel health
+docker compose ps
+
+# Verify sentinel is listening
+docker compose exec sentinel-internal netstat -tuln | grep 8000
+
+# Test Caddy routing
+curl -k https://localhost/.well-known/jwks.json
+```
+
+### Missing Environment Variables
+
+**Issue:** `DEV_CLIENT_ID` or `DEV_CLIENT_SECRET` not injected
+
+**Fix:** Re-run initialization:
+
+```bash
+make clean
+make init
+```
+
+This regenerates all secrets and `.env` files.
 
 ---
 
-This example demonstrates **admission gating with OAuth2** using **profiles**: sentinel in `gated` mode, client and agent in `direct` mode. TLS remains at the proxy; overlay encryption is left for later examples.
+## Variations to Try
+
+### 1. Invalid Token
+
+**Modify** `.env.agent` to use an incorrect client secret:
+
+```bash
+FAME_ADMISSION_CLIENT_SECRET=invalid-secret
+```
+
+**Expected:** Sentinel rejects the connection with a 401 Unauthorized error.
+
+### 2. Expired Token
+
+**Modify** `generate-secrets.mjs` to create tokens with short expiration:
+
+```javascript
+expiresIn: "1s"; // Token expires in 1 second
+```
+
+**Expected:** Connection fails after token expires during active session.
+
+### 3. Multiple Clients
+
+**Create** additional client configurations with different credentials:
+
+```bash
+cp config/.env.client config/.env.client2
+# Edit .env.client2 with new DEV_CLIENT_ID/SECRET
+```
+
+**Expected:** Each client gets independent authentication and access.
+
+### 4. Switch to Overlay Encryption
+
+**Upgrade** security to add message encryption (see `../overlay/` example):
+
+```bash
+# .env.sentinel
+FAME_SECURITY_PROFILE=overlay  # Adds encryption layer
+```
+
+---
+
+## Cleanup
+
+Stop all services and remove generated files:
+
+```bash
+make clean
+```
+
+This removes:
+
+- Docker containers and volumes
+- Generated `.env` files
+- TypeScript build artifacts (`dist/`)
+
+---
+
+## Key Takeaways
+
+1. **OAuth2 Client Credentials**: Simple machine-to-machine authentication
+2. **Gated Admission**: Sentinel validates JWT before granting fabric access
+3. **Development OAuth2 Server**: For testing only – use a real OAuth2 provider in production
+4. **JWT Validation**: Signature, issuer, audience, and expiration checks
+5. **TLS Termination**: Caddy handles HTTPS/WSS with internal CA certificates
+6. **No Overlay Encryption**: This example only controls admission, not message encryption
+
+---
+
+## Next Steps
+
+- **Add Message Encryption**: See `../overlay/` for overlay encryption
+- **Use Production OAuth2**: Replace dev OAuth2 server with Auth0, Keycloak, or Okta
+- **Add Authorization**: Extend JWT claims to include roles/permissions
+- **Multi-Tenant Isolation**: Use JWT claims to route messages to tenant-specific agents
+- **Token Refresh**: Implement refresh token flow for long-lived sessions
+
+---
+
+## Additional Resources
+
+- [OAuth2 Client Credentials Flow](https://oauth.net/2/grant-types/client-credentials/)
+- [JWT Best Practices](https://datatracker.ietf.org/doc/html/rfc8725)
+- [Caddy TLS Documentation](https://caddyserver.com/docs/automatic-https)
+- [Naylence Security Profiles](../../README.md#security-profiles)

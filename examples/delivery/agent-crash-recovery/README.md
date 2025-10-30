@@ -1,24 +1,34 @@
-# Crash Recovery: Agent Reprocessing Messages (TypeScript)
+# Crash Recovery: Agent Reprocessing Messages
 
-This TypeScript example mirrors the Python demo at
-`examples/delivery/agent-crash-recovery`. It showcases Naylence’s ability to
-recover from **agent crashes** while preserving in-flight messages with
-**at-least-once delivery** and a **durable store**.
+This example demonstrates Naylence's ability to **recover from agent crashes** and **automatically reprocess unhandled messages** — a core feature of the delivery system.
 
-If the agent crashes mid-processing, the fabric replays the message when the
-agent comes back online. Because the agent’s state is persisted, the retry runs
-with the updated counter and succeeds.
+Normally, acknowledgments (`ACKs`) are issued _before_ an agent finishes handling a message. If the agent crashes mid-processing, the framework ensures the message is not lost. With **at-least-once delivery mode** and a **durable store** enabled, the unprocessed message is preserved and retried when the agent restarts.
+
+⚠️ **Important:** This example requires both:
+
+- **At-least-once delivery mode** enabled via `FAME_DELIVERY_PROFILE=at-least-once`.
+- A **durable storage backend** (e.g., SQLite). The default in-memory store will _not_ persist messages across restarts.
+
+Agent persistence is enabled in `config/.env.agent` using the following variables:
+
+```
+FAME_DELIVERY_PROFILE=at-least-once
+FAME_STORAGE_PROFILE=encrypted-sqlite
+FAME_STORAGE_MASTER_KEY=<your_master_key>
+FAME_STORAGE_DB_DIRECTORY=/work/data/agent
+```
 
 ---
 
-## What’s included
+## What's inside
 
-- **Sentinel** — coordination node that accepts downstream connections.
-- **MessageAgent** — stateful agent with a persistent counter:
-  - increments the counter on each message (stored in encrypted SQLite).
-  - intentionally crashes on **odd counts**.
-  - successfully processes the same message on **even counts** after restart.
-- **Client** — sends a single `"Hello, World!"` payload.
+- **Sentinel** — coordination node that manages message routing.
+- **MessageAgent** — stateful agent with a counter:
+  - On each message, it increments the counter (persisted in agent state).
+  - On **odd counts**, it simulates a crash (`process.exit(1)`).
+  - On **even counts**, it processes the message successfully.
+
+- **Client** — sends a simple message (`"Hello, World!"`).
 
 Flow:
 
@@ -26,92 +36,62 @@ Flow:
 client ──▶ sentinel ──▶ message-agent
 ```
 
-1. Client sends message.
-2. Agent increments counter → odd → simulates a crash (`process.exit(1)`).
-3. Docker Compose restarts agent container.
-4. Agent resumes with persisted counter → retries the same message → succeeds.
+- Odd count → agent crashes mid-processing → Docker Compose restarts it.
+- Restart → agent resumes with counter incremented → reprocesses same message successfully.
 
 ---
 
-## Requirements
+## Files
 
-- Node.js ≥ 18 for local builds and client runs.
-- Docker + Docker Compose to run the sentinel and agent.
-
-Run the initialization step once to install dependencies, generate a random
-storage master key, and create the `.env` files:
-
-```bash
-make init
-```
+- `sentinel.ts` — starts the sentinel.
+- `message-agent.ts` — agent with counter + crash simulation.
+- `client.ts` — sends a message.
+- `common.ts` — shared constants (agent address).
+- `docker-compose.yml` — stack with auto-restart for the agent.
+- `config/.env.agent.example` — template for delivery mode and durable storage configuration.
+- `config/.env.client.example` — template for client configuration.
+- `Makefile` — convenience targets (`init`, `start`, `run`, `stop`, etc.).
 
 ---
 
 ## Quick start
 
-```bash
-make init    # install deps + generate config (run once per checkout)
-make start   # build + launch sentinel and message-agent
-make run     # run the client once (crash → restart → success)
-make stop    # tear everything down
-```
+> Requirements: Docker + Docker Compose + Node.js 18+ installed.
 
-During the crash/restart cycle, the Makefile prints the agent logs so you can
-see both the simulated failure and the eventual success.
-
-For full envelope tracing:
+1. **Initialize and build**
 
 ```bash
-make run-verbose
+make init    # installs dependencies and generates config files
+make build   # compiles TypeScript to JavaScript
 ```
 
----
-
-## Alternative: Docker Compose
-
-1. **Initialize configuration and build artifacts**
+Or run both steps with:
 
 ```bash
-make init
-npm run build
-docker compose up -d --build
+make start   # runs init, build, and starts services
 ```
 
-This brings up:
-
-- `sentinel` listening on `localhost:8000`
-- `message-agent` connected downstream with encrypted SQLite storage mounted at
-  `./data`
-
-2. **Run the client from the host**
+2. **Send a message (simulate crash & recovery)**
 
 ```bash
-FAME_PLUGINS=naylence-runtime,naylence-agent-sdk \
-FAME_DELIVERY_PROFILE=at-least-once \
-FAME_DIRECT_ADMISSION_URL="ws://localhost:8000/fame/v1/attach/ws/downstream" \
-node dist/client.mjs
+make run
 ```
 
-3. **Shut everything down**
+What happens:
+
+- Client sends `"Hello, World!"`.
+- Agent receives message, increments counter → odd count.
+- Agent simulates crash → container exits.
+- Docker Compose restarts agent.
+- Agent resumes with counter incremented → reprocesses the _same_ message successfully.
+
+Logs will show both the crash and the eventual successful processing.
+
+3. **Stop everything**
 
 ```bash
-docker compose down --remove-orphans
+make stop
 ```
-
----
-
-## Configuration
-
-- `config/.env.agent` enables at-least-once delivery and durable storage via
-  Naylence’s encrypted SQLite backend. The storage directory is mapped to
-  `./data` for persistence across restarts.
-- `config/.env.client` keeps the client on the same at-least-once profile so
-  retries are enabled end-to-end.
-- `config/.secrets/storage-master-key.txt` holds the 32-byte key created during
-  `make init` (ignored by git and excluded from Docker builds).
-
-> Re-run `make init` whenever you need to rotate the development key or
-> regenerate the configuration files.
 
 ---
 
@@ -121,34 +101,115 @@ Client:
 
 ```
 Sending message to MessageAgent...
-Acknowledgment received: { type: 'DeliveryAck', ok: true, ... }
+Acknowledgment received: DeliveryAck { ok: true, ... }
 ```
 
-Agent logs:
+Logs (`make run` shows them automatically):
 
 ```
 MessageAgent current state: 0
 MessageAgent simulating crash while processing message...
-# container restarts
+... container restarts ...
 MessageAgent current state: 1
 MessageAgent processed message successfully: Hello, World!
 ```
 
 ---
 
-## Troubleshooting
+## How it works
 
-- **Agent never restarts** → ensure Docker Compose is running and that
-  `restart: on-failure` is still present in `docker-compose.yml`.
-- **No recovery after crash** → verify the storage variables in
-  `config/.env.agent` and confirm `./data/agent` has write permissions.
-- **Client cannot connect** → wait for the sentinel healthcheck to pass, then
-  retry the client command once `docker compose ps` shows the service as healthy.
+- **Pre-handle ACKs:** Naylence issues delivery acks before agent code executes. If the agent dies mid-task, the ack is not the end of the story.
+- **At-least-once delivery:** Enabled via `FAME_DELIVERY_PROFILE=at-least-once`, ensures messages are retried if they weren't fully processed.
+- **Durable state:** Because the agent state (counter) and pending messages are in a persistent store, they survive restarts.
+- **Recovery:** Upon restart, the agent automatically retries the unprocessed message. From the client's perspective, delivery remains **at-least-once**.
 
 ---
 
-## Key takeaway
+## Additional commands
 
-At-least-once delivery plus durable storage ensures that a crashing agent does
-not lose in-flight work. The framework automatically replays unhandled messages
-once the agent resumes, keeping reliability guarantees intact.
+### View live logs
+
+```bash
+make logs    # tail message-agent logs (Ctrl+C to stop)
+```
+
+### Run with verbose envelope logging
+
+```bash
+make run-verbose    # shows detailed envelope traffic
+```
+
+### Clean everything
+
+```bash
+make clean    # stops services, removes build artifacts, data, and config files
+```
+
+---
+
+## Configuration details
+
+The example uses two environment files:
+
+**`config/.env.agent`** (generated from `.env.agent.example`):
+
+```bash
+FAME_DIRECT_ADMISSION_URL=ws://sentinel:8000/fame/v1/attach/ws/downstream
+FAME_DELIVERY_PROFILE=at-least-once
+FAME_STORAGE_PROFILE=encrypted-sqlite
+FAME_STORAGE_MASTER_KEY=<generated-master-key>
+FAME_STORAGE_DB_DIRECTORY=/work/data/agent
+FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk
+FAME_SHOW_ENVELOPES=true
+```
+
+**`config/.env.client`** (generated from `.env.client.example`):
+
+```bash
+FAME_DIRECT_ADMISSION_URL=ws://localhost:8000/fame/v1/attach/ws/upstream
+```
+
+These files are automatically generated by `make init` using the `generate-secrets.mjs` script.
+
+---
+
+## Troubleshooting
+
+- **Agent doesn't reprocess after crash** → check `config/.env.agent` to confirm both at-least-once delivery and durable storage are configured:
+
+  ```
+  FAME_DELIVERY_PROFILE=at-least-once
+  FAME_STORAGE_PROFILE=encrypted-sqlite
+  FAME_STORAGE_MASTER_KEY=<your_master_key>
+  FAME_STORAGE_DB_DIRECTORY=/work/data/agent
+  ```
+
+- **Client hangs** → ensure sentinel is healthy (`docker ps` should show `sentinel` up).
+- **Repeated crashes** → expected on odd counts; try sending multiple messages to see alternating crash/success behavior.
+- **Missing config files** → run `make init` to generate `.env.agent` and `.env.client` from templates.
+- **Build errors** → ensure Node.js 18+ is installed and dependencies are installed (`npm install`).
+- **Permission errors with data directory** → ensure the `data/agent` directory exists and is writable.
+
+---
+
+## Code comparison: Python vs TypeScript
+
+Key differences in the implementation:
+
+| Python                     | TypeScript                  | Notes                              |
+| -------------------------- | --------------------------- | ---------------------------------- |
+| `sys.exit(1)`              | `process.exit(1)`           | Exit process to simulate crash     |
+| `on_message`               | `onMessage`                 | CamelCase for method names         |
+| Agent state access         | `await this.withState(...)` | TypeScript uses async state access |
+| Pydantic models            | Zod schemas + classes       | Schema validation approach         |
+| `BaseAgentState` extension | `extends BaseAgentState`    | State model definition             |
+
+---
+
+## Next steps
+
+- Try sending multiple messages to observe the alternating crash/success pattern.
+- Modify the crash condition (e.g., crash on every 3rd message instead of odd counts).
+- Explore the persisted state in `data/agent/` to see how the counter is stored.
+- Compare with the `retry-on-no-ack-received` example for different delivery semantics.
+- Integrate this pattern into your own agents that need guaranteed message processing.

@@ -5,7 +5,7 @@ DOCKER_IMAGE := naylence/agent-sdk-node:0.3.3
 # Generate secrets and .env files
 init:
 	@echo "Generating secrets..."
-	@node ../../../scripts/generate-secrets.mjs
+	@KEEP_CREDENTIALS=false node ../../../scripts/generate-secrets.mjs
 
 # Build TypeScript sources
 build:
