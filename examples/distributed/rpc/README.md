@@ -59,6 +59,14 @@ Run the sample client against the math agent (add/multiply/fib_stream):
 make run         # ▶️ executes client
 ```
 
+Prefer a browser UI? Start the browser client in another terminal:
+
+```bash
+make run-browser  # 🌐 opens http://localhost:3000
+```
+
+The page lets you call `add`, `multiply`, and stream Fibonacci numbers without leaving your browser.
+
 Shut down when done:
 
 ```bash

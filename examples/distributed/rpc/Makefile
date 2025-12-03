@@ -26,6 +26,13 @@ run-verbose:
 	FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk \
 	node dist/client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@echo "Make sure the sentinel and math agent are running (make start)"
+	cd browser && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/dist browser/node_modules
+
+.PHONY: start stop build run run-verbose run-browser clean install
