@@ -39,11 +39,13 @@ class StorageAgent extends BaseAgent {
   private _store?: KeyValueStore<RecordModel>;
 
   /**
-   * Initialize the key-value store during agent startup
-   * The storage provider is accessed from the node context after the agent starts
+   * Initialize the key-value store after the agent is registered with the node
+   * The storage provider is only available after onRegister() is called
    */
-  async start(): Promise<void> {
-    // Get the storage provider from the node (available after agent starts)
+  async onRegister(node: any): Promise<void> {
+    await super.onRegister?.(node);
+    
+    // Get the storage provider from the node (now available)
     const provider = this.storageProvider;
 
     // Create a namespaced key-value store bound to RecordModel
