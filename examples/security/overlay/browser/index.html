@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Naylence Overlay Security — Browser Client</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 960px;
+        margin: 40px auto;
+        padding: 0 24px 48px;
+        background: #f7fafc;
+        color: #1a202c;
+      }
+      #app {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        color: #2d3748;
+      }
+      p {
+        margin: 0 0 16px;
+        line-height: 1.6;
+      }
+      .feature-list {
+        margin: 0 0 24px 0;
+        padding-left: 24px;
+        line-height: 1.8;
+      }
+      .feature-list li {
+        color: #4a5568;
+        margin-bottom: 4px;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin: 24px 0;
+      }
+      .operation-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .operation-row label {
+        font-size: 14px;
+        color: #4a5568;
+        min-width: 80px;
+      }
+      .operation-row input[type="number"] {
+        width: 80px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e0;
+        font-size: 15px;
+        background: #fdfdfd;
+        text-align: center;
+      }
+      .operation-row .operator {
+        font-size: 18px;
+        color: #2d3748;
+        font-weight: 500;
+        padding: 0 4px;
+      }
+      .operation-row .equals {
+        font-size: 18px;
+        color: #4a5568;
+        padding: 0 4px;
+      }
+      .operation-row .result {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 15px;
+        color: #2d3748;
+        font-weight: 600;
+        min-width: 60px;
+        padding: 8px 12px;
+        background: #edf2f7;
+        border-radius: 6px;
+      }
+      .operation-row .result.placeholder {
+        color: #a0aec0;
+        font-style: italic;
+        font-weight: 400;
+      }
+      button {
+        align-self: flex-start;
+        padding: 12px 24px;
+        border-radius: 6px;
+        border: none;
+        background: linear-gradient(120deg, #2b6cb0, #2c5282);
+        color: #ffffff;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 6px 16px rgba(43, 108, 176, 0.28);
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+        margin-top: 8px;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(43, 108, 176, 0.34);
+      }
+      button:disabled {
+        cursor: not-allowed;
+        background: #a0aec0;
+        box-shadow: none;
+      }
+      .topology-diagram {
+        display: flex;
+        justify-content: center;
+        margin: 24px 0;
+        padding: 16px;
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+      }
+      .topology-diagram img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      #status {
+        margin: 16px 0;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border-left: 4px solid #2b6cb0;
+        background: #ebf8ff;
+        font-size: 14px;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        white-space: pre-wrap;
+      }
+      #status.loading {
+        border-left-color: #4c51bf;
+        background: #f5f3ff;
+        color: #434190;
+        font-style: normal;
+        font-weight: 500;
+      }
+      #status.success {
+        border-left-color: #38a169;
+        background: #f0fff4;
+        color: #276749;
+        font-weight: 500;
+      }
+      #status.error {
+        border-left-color: #e53e3e;
+        background: #fff5f5;
+        color: #c53030;
+        font-weight: 500;
+      }
+      .fib-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 0;
+      }
+      .fib-row label {
+        font-size: 14px;
+        color: #4a5568;
+        min-width: 80px;
+        padding-top: 8px;
+      }
+      .fib-row input[type="number"] {
+        width: 80px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e0;
+        font-size: 15px;
+        background: #fdfdfd;
+        text-align: center;
+      }
+      .fib-row .colon {
+        font-size: 18px;
+        color: #4a5568;
+        padding: 8px 4px 0 4px;
+      }
+      #fibStream {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        padding-top: 2px;
+      }
+      #fibStream span {
+        background: #edf2f7;
+        color: #2d3748;
+        padding: 6px 10px;
+        border-radius: 6px;
+      }
+      #fibStream.placeholder {
+        color: #a0aec0;
+        font-style: italic;
+        padding-top: 8px;
+      }
+      .envelope-inspector {
+        margin-top: 32px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        padding: 20px 22px;
+        background: #ffffff;
+        box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+      }
+      .envelope-inspector-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .envelope-inspector-header h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .envelope-controls {
+        display: flex;
+        gap: 8px;
+      }
+      .small-button {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e0;
+        background: #ffffff;
+        color: #4a5568;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .small-button:hover {
+        background: #f7fafc;
+        border-color: #a0aec0;
+      }
+      .small-button:active {
+        transform: scale(0.97);
+      }
+      .envelope-log {
+        max-height: 600px;
+        overflow-y: auto;
+        transition: max-height 0.3s ease;
+      }
+      .envelope-log.collapsed {
+        max-height: 0;
+        overflow: hidden;
+      }
+      .envelope-entry {
+        margin-bottom: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .envelope-entry-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: #f7fafc;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .envelope-entry-header:hover {
+        background: #edf2f7;
+      }
+      .envelope-direction {
+        font-size: 18px;
+        line-height: 1;
+      }
+      .envelope-direction.inbound {
+        color: #38a169;
+      }
+      .envelope-direction.outbound {
+        color: #3182ce;
+      }
+      .envelope-meta {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        color: #4a5568;
+      }
+      .envelope-timestamp {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        color: #718096;
+      }
+      .envelope-type {
+        background: #edf2f7;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+      .envelope-expand-icon {
+        color: #a0aec0;
+        transition: transform 0.2s ease;
+      }
+      .envelope-entry.expanded .envelope-expand-icon {
+        transform: rotate(180deg);
+      }
+      .envelope-content {
+        display: none;
+        padding: 14px;
+        background: #fafafa;
+        border-top: 1px solid #e2e8f0;
+      }
+      .envelope-entry.expanded .envelope-content {
+        display: block;
+      }
+      .envelope-json {
+        margin: 0;
+        padding: 12px;
+        background: #1a202c;
+        color: #e2e8f0;
+        border-radius: 6px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .envelope-empty {
+        padding: 20px;
+        text-align: center;
+        color: #718096;
+        font-style: italic;
+      }
+      .note {
+        margin-top: 28px;
+        font-size: 14px;
+        color: #4a5568;
+        line-height: 1.6;
+      }
+      code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        background: #ebf8ff;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+    </style>
+    <script type="module" src="/env.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Naylence Overlay Security — Browser Client</h1>
+      <p>
+        This browser client showcases the overlay security model with PKCE authentication:
+      </p>
+      <ul class="feature-list">
+        <li>OAuth 2.0 PKCE authentication</li>
+        <li>Public key exchange during node attachment</li>
+        <li>Envelope signing for integrity verification</li>
+        <li>Secure RPC and streaming over the Naylence fabric</li>
+      </ul>
+      <div class="topology-diagram">
+        <img src="/images/overlay-security-example.svg" alt="Example Topology" />
+      </div>
+      <div class="controls">
+        <div class="operation-row">
+          <label for="addX">Addition:</label>
+          <input id="addX" type="number" value="3" />
+          <span class="operator">+</span>
+          <input id="addY" type="number" value="4" />
+          <span class="equals">=</span>
+          <span id="addResult" class="result placeholder">—</span>
+        </div>
+        <div class="operation-row">
+          <label for="multiplyX">Multiply:</label>
+          <input id="multiplyX" type="number" value="6" />
+          <span class="operator">×</span>
+          <input id="multiplyY" type="number" value="7" />
+          <span class="equals">=</span>
+          <span id="multiplyResult" class="result placeholder">—</span>
+        </div>
+        <div class="fib-row">
+          <label for="fibCount">Fibonacci:</label>
+          <input id="fibCount" type="number" min="1" max="32" value="10" />
+          <span class="colon">:</span>
+          <div id="fibStream" class="placeholder" aria-live="polite">—</div>
+        </div>
+        <button id="runButton">Run overlay demo</button>
+      </div>
+      <div id="status" class="loading">Ready. Click "Run overlay demo" to authenticate via PKCE.</div>
+      <div class="envelope-inspector">
+        <div class="envelope-inspector-header">
+          <h2>Envelope Inspector</h2>
+          <div class="envelope-controls">
+            <button id="clearEnvelopes" class="small-button" type="button">Clear</button>
+            <button id="toggleEnvelopes" class="small-button" type="button">▼ Show</button>
+          </div>
+        </div>
+        <div id="envelopeLog" class="envelope-log collapsed"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/browser-client.ts"></script>
+  </body>
+</html>

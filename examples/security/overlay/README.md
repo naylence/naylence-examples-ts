@@ -139,6 +139,22 @@ This shows:
 
 All messages are cryptographically signed and verified.
 
+### Run the Browser Client (PKCE)
+
+Prefer a front-end walkthrough that handles OAuth2 PKCE in the browser?
+
+```bash
+make run-browser
+```
+
+This command installs the Vite dependencies (if needed) and launches a browser client at `http://localhost:3000`. The browser sample:
+
+- Uses `direct-pkce` admission (no client secret required)
+- Performs the OAuth2 authorization redirect and token exchange in the browser
+- Connects to the sentinel with overlay security and shows signed Fibonacci stream updates live
+
+Before launching, export and trust the Caddy root certificate so that the browser accepts requests to `https://localhost`. Step-by-step instructions are in `browser/README.md`.
+
 ### Run with Verbose Logging
 
 For detailed envelope signing/verification logs:
