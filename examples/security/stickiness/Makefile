@@ -1,6 +1,6 @@
 .PHONY: init build start stop run run-verbose clean help
 
-DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.3
+DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.5
 
 # Generate secrets and .env files
 init:
