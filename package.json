@@ -32,7 +32,8 @@
     "example:simple:hello": "cross-env FAME_LOG_LEVEL=WARN FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/hello.ts"
   },
   "dependencies": {
-    "@naylence/agent-sdk": "^0.3.3",
+    "@naylence/advanced-security": "^0.3.11",
+    "@naylence/agent-sdk": "^0.3.5",
     "openai": "^4.65.0"
   },
   "devDependencies": {
@@ -44,7 +45,8 @@
     "prettier": "^3.3.3",
     "tsx": "^4.20.0",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.11.0"
+    "typescript-eslint": "^8.11.0",
+    "vite": "^5.4.10"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -44,5 +44,4 @@ coverage/
 **/secrets
 templates
 
-
-
+**/run_local_*.sh
