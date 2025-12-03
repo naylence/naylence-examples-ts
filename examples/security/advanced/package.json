@@ -13,12 +13,12 @@
     "math-agent": "node dist/math-agent.mjs"
   },
   "dependencies": {
-    "@naylence/advanced-security": "^0.3.5",
-    "@naylence/agent-sdk": "^0.3.3"
+    "@naylence/advanced-security": "0.3.11",
+    "@naylence/agent-sdk": "0.3.5"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "typescript": "^5.7.3",
-    "why-is-node-running": "^3.2.2",
-    "@types/node": "^22.10.2"
+    "why-is-node-running": "^3.2.2"
   }
 }

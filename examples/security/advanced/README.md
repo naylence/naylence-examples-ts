@@ -198,6 +198,31 @@ This shows:
 - Sealed envelope encryption/decryption
 - Message routing with encrypted envelopes
 
+### Run the Browser Client (PKCE + Strict Overlay)
+
+Interact with the strict overlay fabric directly from the browser using the PKCE flow and trust bundle support:
+
+1. Ensure the stack is running (`make start`) and the development Caddy root certificate is trusted on your system (`https://localhost:8443`).
+2. Generate secrets if you have not already. This creates a PKCE client and renders `browser/env.js` from the template:
+
+  ```bash
+  make init
+  ```
+
+3. Launch the browser client:
+
+  ```bash
+  make run-browser
+  ```
+
+4. Open <http://localhost:3000>. The runtime will
+  - perform OAuth2 PKCE to the development IdP,
+  - download the Naylence trust bundle from `/.well-known/naylence/trust-bundle.json` (TOFU enabled),
+  - request a SPIFFE certificate from the CA service, and
+  - execute sealed math RPCs against the fabric.
+
+The generated `browser/env.js` can be regenerated at any time via `make init` if you need to refresh the PKCE client identifier.
+
 ---
 
 ## Code Structure

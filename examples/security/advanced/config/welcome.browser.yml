@@ -8,7 +8,8 @@ welcome:
   transport:
     type: WebSocketTransportProvisioner
     # url: wss://sentinel/fame/v1/attach/ws/downstream
-    url: ws://sentinel-internal:8000/fame/v1/attach/ws/downstream
+    url: ws://localhost:3000/fame/v1/attach/ws/downstream
+
 
   placement:
     type: StaticNodePlacementStrategy
@@ -20,7 +21,7 @@ welcome:
     issuer: https://welcome/fame/welcome
     audience: fame.fabric
 
-  ca_service_url: https://ca/fame/v1/ca
+  ca_service_url: http://localhost:3000/fame/v1/ca
 
   authorizer:
     type: OAuth2Authorizer

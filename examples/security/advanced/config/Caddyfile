@@ -6,10 +6,12 @@ localhost:443 sentinel:443 oauth2-server:443 welcome:443 ca:443 {
 	@welcome_jwks path /fame/welcome/*
 	@welcome path /fame/v1/welcome/*
 	@ca path /fame/v1/ca/*
+	@ca_trust_bundle path /.well-known/naylence/trust-bundle.json
 	reverse_proxy @fame sentinel-internal:8000
 	reverse_proxy @jwks oauth2-server-internal:8099
 	reverse_proxy @oauth oauth2-server-internal:8099
 	reverse_proxy @welcome_jwks welcome-internal:8090
 	reverse_proxy @welcome welcome-internal:8090
 	reverse_proxy @ca ca-internal:8098
+	reverse_proxy @ca_trust_bundle ca-internal:8098
 }

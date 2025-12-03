@@ -1,18 +1,21 @@
-.PHONY: init build start stop run run-verbose clean help
+.PHONY: init build start stop run run-verbose run-browser clean help
 
 # Docker image for Naylence Agent SDK with Advanced Security
-DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.3
+DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.5
 
 .DEFAULT_GOAL := help
 
 # Initialize: generate certificates and secrets
 init:
 	@echo "🔐 Generating PKI certificates..."
-	@mkdir -p config/certs
-	@node scripts/setup-pki.mjs --output ./config/certs --org "Strict Overlay Development"
+	@docker run --rm \
+		-v "$(shell pwd):/work" \
+		-w /work \
+		$(DOCKER_IMAGE) \
+		node scripts/setup-pki.mjs --output ./config/certs --org "Strict Overlay Development"
 	
 	@echo "🔑 Generating dev secrets..."
-	@KEEP_CREDENTIALS=false node ../../../scripts/generate-secrets.mjs
+	node ../../../scripts/generate-secrets.mjs
 
 
 # Build TypeScript sources
@@ -64,6 +67,11 @@ run-verbose:
 		$(DOCKER_IMAGE) \
 		node client.mjs
 
+run-browser:
+	@echo "🌐 Starting strict overlay browser client on http://localhost:3000"
+	@echo "🔐 Ensure the Caddy root certificate (https://localhost:8443) is trusted before continuing."
+	cd browser && npm install && npm run dev
+
 # Clean up generated files and volumes
 clean: stop
 	@echo "🧹 Cleaning generated files..."
@@ -73,13 +81,14 @@ clean: stop
 	@rm -f config/.env.sentinel
 	@rm -f config/.env.oauth2-server
 	@rm -f config/.env.welcome
+	@rm -f config/.env.welcome-browser
 	@rm -f config/.env.ca
 	@echo "🧹 Cleaning secrets directory..."
 	@rm -rf config/secrets
 	@echo "🧹 Cleaning PKI certificates..."
 	@rm -rf config/certs
 	@echo "🧹 Cleaning build artifacts..."
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/node_modules browser/dist browser/env.js
 	@echo "✅ Clean complete!"
 
 # Show help
@@ -91,6 +100,7 @@ help:
 	@echo "  stop          - Stop all services"
 	@echo "  run           - Run the client (requires services to be running)"
 	@echo "  run-verbose   - Run the client with envelope display"
+	@echo "  run-browser   - Launch the browser PKCE client for strict overlay"
 	@echo "  clean         - Remove generated files and Docker volumes"
 	@echo ""
 	@echo "Quick start:"

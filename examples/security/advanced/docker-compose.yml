@@ -1,6 +1,6 @@
 x-config: &config
-  version: &base-version "0.3.3"
-  base-image: &base-image naylence/agent-sdk-adv-node:0.3.3
+  version: &base-version "0.3.5"
+  base-image: &base-image naylence/agent-sdk-adv-node:0.3.5
 
 x-common-base: &common-base
   image: *base-image
@@ -9,6 +9,8 @@ x-common-base: &common-base
     - /app/node_modules
     - caddy-data:/data
     - ./config/certs:/etc/fame/certs:ro
+  # environment:
+  #   NODE_OPTIONS: --import=/app/require-shim.mjs
   working_dir: /app
   networks:
     - naylence-net
@@ -64,7 +66,9 @@ services:
     command: ["node", "/app/node_modules/@naylence/advanced-security/dist/esm/naylence/fame/security/cert/ca-server.js"]
     volumes:
       - ./dist:/app
+      # - ../../../../naylence-runtime-ts/dist:/app/node_modules/@naylence/runtime/dist:ro
       - /app/node_modules
+      - ../../../../naylence-advanced-security-ts/dist:/app/node_modules/@naylence/advanced-security/dist:ro
       - caddy-data:/data
       - ./config/certs:/etc/fame/certs:ro
       - .:/work:ro
@@ -79,6 +83,7 @@ services:
     command: ["node", "/app/node_modules/@naylence/runtime/dist/esm/naylence/fame/welcome/node-welcome-server.js"]
     volumes:
       - ./dist:/app
+      # - ../../../../naylence-runtime-ts/dist:/app/node_modules/@naylence/runtime/dist:ro
       - /app/node_modules
       - caddy-data:/data
       - ./config/certs:/etc/fame/certs:ro

@@ -71,6 +71,8 @@ const clientSecret = options.oauthJson
   ? randomId("s")
   : randomBytes(32).toString("hex");
 
+const devPassword = randomBytes(16).toString("hex");
+
 const hmacSecret = options.hmac 
   ? randomBytes(32).toString("base64url")
   : null;
@@ -81,7 +83,9 @@ const storageMasterKey = randomBytes(32).toString("base64url");
 const replacements = new Map([
   ["${DEV_CLIENT_ID}", clientId],
   ["${DEV_CLIENT_SECRET}", clientSecret],
+  ["${DEV_PASSWORD}", devPassword],
   ["${FAME_STORAGE_MASTER_KEY}", storageMasterKey],
+  ["${FAME_ADMISSION_CLIENT_ID}", clientId],
 ]);
 
 if (hmacSecret) {
@@ -132,6 +136,19 @@ for (const templatePath of templates) {
   console.log(`Generated: ${envPath}`);
 }
 
+// Render browser env.js from template if present
+const browserEnvTemplate = resolve(ROOT_DIR, "browser", "env.template.js");
+const browserEnvOutput = resolve(ROOT_DIR, "browser", "env.js");
+if (existsSync(browserEnvTemplate)) {
+  let browserEnv = readFileSync(browserEnvTemplate, "utf8");
+  for (const [token, value] of replacements) {
+    browserEnv = browserEnv.replaceAll(token, value);
+  }
+  writeFileSync(browserEnvOutput, browserEnv, "utf8");
+  generated.push(relative(ROOT_DIR, browserEnvOutput));
+  console.log(`Generated: ${browserEnvOutput}`);
+}
+
 // Generate oauth2-clients.json if requested
 if (options.oauthJson && saveCredentials) {
   const oauthClientsPath = join(SECRETS_DIR, "oauth2-clients.json");
@@ -155,6 +172,7 @@ if (saveCredentials) {
     `==========================================\n` +
     `CLIENT_ID=${clientId}\n` +
     `CLIENT_SECRET=${clientSecret}\n` +
+    `DEV_PASSWORD=${devPassword}\n` +
     (hmacSecret ? `HMAC_SECRET=${hmacSecret}\n` : "") +
     `\n` +
     `These credentials are shared across all services.\n`;
