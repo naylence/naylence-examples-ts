@@ -1,6 +1,6 @@
 .PHONY: init build start stop run run-verbose clean help
 
-DOCKER_IMAGE := naylence-open-telemetry-ts:latest
+DOCKER_IMAGE := naylence-open-telemetry-ts:0.3.5
 COMPOSE_PROJECT := open-telemetry
 
 .DEFAULT_GOAL := help
