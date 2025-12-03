@@ -1,11 +1,11 @@
-.PHONY: init build start stop run run-verbose clean
+.PHONY: init build start stop run run-verbose run-browser clean
 
-DOCKER_IMAGE := naylence/agent-sdk-node:0.3.3
+DOCKER_IMAGE := naylence/agent-sdk-node:0.3.5
 
 # Generate secrets and .env files
 init:
 	@echo "Generating secrets..."
-	@KEEP_CREDENTIALS=false node ../../../scripts/generate-secrets.mjs
+	node ../../../scripts/generate-secrets.mjs
 
 # Build TypeScript sources
 build:
@@ -54,6 +54,11 @@ run-verbose:
 		$(DOCKER_IMAGE) \
 		node client.mjs
 
+run-browser:
+	@echo "🌐 Starting gated browser client on http://localhost:3000"
+	@echo "🔐 Ensure you've trusted the Caddy root certificate before continuing."
+	cd browser && npm install && npm run dev
+
 # Clean up generated files and volumes
 clean:
 	@echo "Cleaning up..."
@@ -63,7 +68,7 @@ clean:
 	@rm -f config/.env.sentinel
 	@rm -f config/.env.oauth2-server
 	@rm -rf config/secrets
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/node_modules browser/dist browser/certs
 	@echo "Clean complete!"
 
 # Show help
@@ -75,4 +80,5 @@ help:
 	@echo "  stop         - Stop all services"
 	@echo "  run          - Run the client (requires services to be running)"
 	@echo "  run-verbose  - Run the client with debug logging"
+	@echo "  run-browser  - Run the gated browser PKCE demo via Vite"
 	@echo "  clean        - Remove generated files and Docker volumes"
