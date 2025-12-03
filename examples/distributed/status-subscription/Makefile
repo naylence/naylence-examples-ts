@@ -22,6 +22,11 @@ run-verbose:
 	FAME_DIRECT_ADMISSION_URL="ws://localhost:8000/fame/v1/attach/ws/downstream" \
 	npm run client
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@echo "⚠️  Make sure the sentinel and status agent are running (make start)"
+	cd browser && npm run dev
+
 run-docker:
 	@docker run --rm \
 	-e FAME_SHOW_ENVELOPES=false \
@@ -44,6 +49,6 @@ run-docker-verbose:
 
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/dist browser/node_modules
 
-.PHONY: start stop run run-verbose run-docker run-docker-verbose clean
+.PHONY: start stop run run-verbose run-browser run-docker run-docker-verbose clean

@@ -61,6 +61,14 @@ Run the sample client against the status agent:
 make run         # ▶️ executes client
 ```
 
+Prefer a UI? Launch the browser client in another terminal:
+
+```bash
+make run-browser  # 🌐 opens http://localhost:3000
+```
+
+The page will start a task and render live status and artifact updates with a realtime progress bar.
+
 Shut down when done:
 
 ```bash
