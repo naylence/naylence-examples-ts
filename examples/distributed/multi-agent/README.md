@@ -39,6 +39,7 @@ reply:   client ◀─ sentinel ◀───────────────
 - **client.ts** — submits text to the analysis agent and prints JSON result.
 - **common.ts** — shared addresses and OpenAI client setup.
 - **docker-compose.yml** — runs sentinel + three agents; client runs on host.
+- **browser/** — interactive web UI for text analysis with envelope inspector.
 
 **Logical addresses**
 
@@ -73,6 +74,12 @@ Run the sample client against the analysis agent:
 make run         # ▶️ executes client
 ```
 
+Or launch the **interactive browser client**:
+
+```bash
+make run-browser # 🌐 opens web UI at http://localhost:3000
+```
+
 Shut down when done:
 
 ```bash
@@ -86,6 +93,8 @@ Use the verbose target to print every **envelope** as it travels through the fab
 ```bash
 make run-verbose
 ```
+
+Or use the browser client's **envelope inspector** for visual real-time inspection.
 
 ---
 

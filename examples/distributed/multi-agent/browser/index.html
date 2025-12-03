@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Naylence Multi-Agent — Browser Client</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px 48px;
+        background: #f7fafc;
+        color: #1a202c;
+      }
+      #app {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        color: #2d3748;
+      }
+      p {
+        margin: 0 0 16px;
+        line-height: 1.6;
+      }
+      .highlight {
+        font-weight: 700;
+      }
+      .feature-list {
+        margin: 0 0 24px 0;
+        padding-left: 24px;
+        line-height: 1.8;
+      }
+      .feature-list li {
+        color: #4a5568;
+        margin-bottom: 4px;
+      }
+      .topology-diagram {
+        display: flex;
+        justify-content: center;
+        margin: 24px 0;
+        padding: 16px;
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+      }
+      .topology-diagram img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      .operations-section {
+        margin: 32px 0;
+      }
+      .operation-group {
+        margin-bottom: 32px;
+        padding: 24px;
+        background: #f7fafc;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+      }
+      .operation-group h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: #2d3748;
+      }
+      .operation-group .agent-info {
+        margin: 0 0 16px;
+        font-size: 14px;
+        color: #718096;
+        font-family: 'Fira Code', 'Courier New', monospace;
+      }
+      .input-area {
+        margin-bottom: 16px;
+      }
+      .input-area label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #4a5568;
+        margin-bottom: 8px;
+      }
+      .input-area textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        background: #ffffff;
+        color: #2d3748;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        resize: vertical;
+        box-sizing: border-box;
+      }
+      .input-area textarea:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+      }
+      .button-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .btn-primary {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .btn-secondary {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4a5568;
+        background: #ffffff;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-secondary:hover:not(:disabled) {
+        background: #f7fafc;
+        border-color: #a0aec0;
+      }
+      .btn-secondary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .results-grid {
+        display: grid;
+        grid-template-columns: 1fr 120px;
+        gap: 16px;
+        margin-top: 16px;
+        align-items: start;
+      }
+      .result-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .result-item label {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #718096;
+      }
+      .result-box {
+        padding: 12px 16px;
+        font-size: 14px;
+        line-height: 1.6;
+        border: 2px solid #4299e1;
+        border-radius: 6px;
+        background: #ebf8ff;
+        color: #2c5282;
+        min-height: 80px;
+        transition: all 0.2s;
+      }
+      .result-box.loading {
+        background: #fefcbf;
+        border-color: #ecc94b;
+        color: #744210;
+        font-style: italic;
+      }
+      .result-box.error {
+        background: #fff5f5;
+        border-color: #fc8181;
+        color: #742a2a;
+      }
+      .result-box.sentiment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 700;
+        height: 100%;
+      }
+      .result-box.sentiment[data-sentiment="1"],
+      .result-box.sentiment[data-sentiment="2"] {
+        background: #fff5f5;
+        border-color: #fc8181;
+        color: #c53030;
+      }
+      .result-box.sentiment[data-sentiment="3"] {
+        background: #fefcbf;
+        border-color: #ecc94b;
+        color: #744210;
+      }
+      .result-box.sentiment[data-sentiment="4"],
+      .result-box.sentiment[data-sentiment="5"] {
+        background: #c6f6d5;
+        border-color: #48bb78;
+        color: #22543d;
+      }
+      .envelope-inspector {
+        margin-top: 48px;
+        padding: 24px;
+        background: #f7fafc;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+      }
+      .envelope-inspector-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .envelope-inspector h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #2d3748;
+      }
+      .envelope-controls {
+        display: flex;
+        gap: 8px;
+      }
+      .small-button {
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #4a5568;
+        background: #ffffff;
+        border: 1px solid #cbd5e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .small-button:hover {
+        background: #edf2f7;
+        border-color: #a0aec0;
+      }
+      .envelope-log {
+        max-height: 600px;
+        overflow-y: auto;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 8px;
+      }
+      .envelope-log.collapsed {
+        display: none;
+      }
+      .envelope-empty {
+        padding: 40px 20px;
+        text-align: center;
+        color: #a0aec0;
+        font-style: italic;
+        font-size: 14px;
+      }
+      .envelope-entry {
+        margin-bottom: 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        background: #ffffff;
+        overflow: hidden;
+      }
+      .envelope-entry-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .envelope-entry-header:hover {
+        background: #f7fafc;
+      }
+      .envelope-direction {
+        font-size: 18px;
+        font-weight: 700;
+        width: 24px;
+        text-align: center;
+      }
+      .envelope-direction.inbound {
+        color: #48bb78;
+      }
+      .envelope-direction.outbound {
+        color: #4299e1;
+      }
+      .envelope-meta {
+        flex: 1;
+        display: flex;
+        gap: 12px;
+        font-size: 13px;
+      }
+      .envelope-timestamp {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        color: #718096;
+      }
+      .envelope-type {
+        font-weight: 600;
+        color: #2d3748;
+      }
+      .envelope-expand-icon {
+        font-size: 12px;
+        color: #a0aec0;
+        transition: transform 0.15s;
+      }
+      .envelope-entry.expanded .envelope-expand-icon {
+        transform: rotate(180deg);
+      }
+      .envelope-content {
+        display: none;
+        padding: 0 12px 12px;
+        border-top: 1px solid #f7fafc;
+      }
+      .envelope-entry.expanded .envelope-content {
+        display: block;
+      }
+      .envelope-json {
+        margin: 8px 0 0;
+        padding: 12px;
+        font-size: 11px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        background: #1a202c;
+        color: #e2e8f0;
+        border-radius: 4px;
+        overflow-x: auto;
+        line-height: 1.5;
+      }
+      code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        background: #ebf8ff;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="/env.js"></script>
+    <script>
+      window.WEBSOCKET_URL = window.__ENV__?.FAME_DIRECT_ADMISSION_URL || "ws://localhost:8000/fame/v1/attach/ws/downstream";
+    </script>
+    <div id="app">
+      <h1>Multi-Agent Text Analysis Example</h1>
+      <p>
+        This example demonstrates a <span class="highlight">distributed multi-agent pipeline</span> where one agent
+        orchestrates multiple others to analyze text. The analysis agent broadcasts requests to both a summarizer
+        agent and a sentiment agent, then merges their results.
+      </p>
+
+      <ul class="feature-list">
+        <li><strong>Analysis Agent</strong> orchestrates at <code>analysis@fame.fabric</code></li>
+        <li><strong>Sentiment Agent</strong> scores sentiment (1-5) at <code>sentiment@fame.fabric</code></li>
+        <li><strong>Summarizer Agent</strong> generates summaries at <code>summarizer@fame.fabric</code></li>
+        <li><strong>Scatter-gather pattern</strong> via <code>Agent.broadcast</code> runs agents in parallel</li>
+        <li><strong>Envelope inspector</strong> shows outbound and inbound messages for this client</li>
+      </ul>
+
+      <div class="topology-diagram">
+        <img src="/multi-agent.svg" alt="Multi-Agent Pipeline Architecture" />
+      </div>
+
+      <div class="operations-section">
+        <div class="operation-group">
+          <h3>Text Analysis</h3>
+          <div class="agent-info">Orchestrator: analysis@fame.fabric → [summarizer, sentiment]</div>
+          
+          <div class="input-area">
+            <label for="textInput">Enter text to analyze:</label>
+            <textarea id="textInput" placeholder="Enter a review, article, or any text to analyze..."></textarea>
+          </div>
+
+          <div class="button-row">
+            <button id="analyzeButton" class="btn-primary">Analyze</button>
+            <button id="loadSampleButton" class="btn-secondary">Load Sample</button>
+          </div>
+
+          <div class="results-grid">
+            <div class="result-item">
+              <label>Summary</label>
+              <div id="summaryResult" class="result-box">Enter text and click Analyze</div>
+            </div>
+            <div class="result-item">
+              <label>Sentiment (1-5)</label>
+              <div id="sentimentResult" class="result-box sentiment">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="envelope-inspector">
+        <div class="envelope-inspector-header">
+          <h2>Envelope Inspector</h2>
+          <div class="envelope-controls">
+            <button id="clearEnvelopes" class="small-button" type="button">Clear</button>
+            <button id="toggleEnvelopes" class="small-button" type="button">▼ Show</button>
+          </div>
+        </div>
+        <div id="envelopeLog" class="envelope-log collapsed"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/browser-client.ts"></script>
+  </body>
+</html>

@@ -24,8 +24,12 @@ run-verbose:
 	FAME_DIRECT_ADMISSION_URL="ws://localhost:8000/fame/v1/attach/ws/downstream" \
 	node dist/client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@cd browser && npm install && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/node_modules browser/dist
 
-.PHONY: build start stop run run-verbose clean
+.PHONY: build start stop run run-verbose run-browser clean
