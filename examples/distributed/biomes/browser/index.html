@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Naylence Biomes — Browser Client</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px 48px;
+        background: #f7fafc;
+        color: #1a202c;
+      }
+      #app {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+        color: #2d3748;
+      }
+      p {
+        margin: 0 0 16px;
+        line-height: 1.6;
+      }
+      .highlight {
+        font-weight: 700;
+      }
+      .feature-list {
+        margin: 0 0 24px 0;
+        padding-left: 24px;
+        line-height: 1.8;
+      }
+      .feature-list li {
+        color: #4a5568;
+        margin-bottom: 4px;
+      }
+      .topology-diagram {
+        display: flex;
+        justify-content: center;
+        margin: 24px 0;
+        padding: 16px;
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+      }
+      .topology-diagram img {
+        max-width: 65%;
+        height: auto;
+        display: block;
+      }
+      .topology-placeholder {
+        padding: 60px 40px;
+        text-align: center;
+        color: #718096;
+        font-style: italic;
+        background: #f7fafc;
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+      }
+      .operations-section {
+        margin: 32px 0;
+      }
+      .operation-group {
+        margin-bottom: 32px;
+        padding: 24px;
+        background: #f7fafc;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+      }
+      .operation-group h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: #2d3748;
+      }
+      .operation-group .agent-info {
+        margin: 0 0 16px;
+        font-size: 14px;
+        color: #718096;
+        font-family: 'Fira Code', 'Courier New', monospace;
+      }
+      .input-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .input-group label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      input {
+        width: 100px;
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e0;
+        font-size: 15px;
+        font-family: inherit;
+        background: #ffffff;
+        box-sizing: border-box;
+        text-align: center;
+      }
+      .operator {
+        font-size: 24px;
+        font-weight: bold;
+        color: #4a5568;
+        margin-top: 18px;
+      }
+      .equals {
+        font-size: 24px;
+        font-weight: bold;
+        color: #4299e1;
+        margin-top: 18px;
+      }
+      .result-inline {
+        margin-top: 18px;
+        padding: 10px 20px;
+        background: #ebf8ff;
+        border: 2px solid #4299e1;
+        border-radius: 6px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2c5282;
+        min-width: 80px;
+        text-align: center;
+      }
+      .result-inline.empty {
+        background: #f7fafc;
+        border-color: #e2e8f0;
+        color: #a0aec0;
+        font-size: 14px;
+        font-weight: normal;
+      }
+      .button-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      input:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+      }
+      button {
+        padding: 10px 24px;
+        border-radius: 6px;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+      }
+      .btn-primary {
+        background: linear-gradient(120deg, #4299e1, #3182ce);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(66, 153, 225, 0.28);
+      }
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(66, 153, 225, 0.34);
+      }
+      .btn-secondary {
+        background: linear-gradient(120deg, #48bb78, #38a169);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(72, 187, 120, 0.28);
+      }
+      .btn-secondary:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(72, 187, 120, 0.34);
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transform: none !important;
+      }
+      .result-box {
+        margin-top: 12px;
+        padding: 14px 16px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 15px;
+        color: #2d3748;
+        min-height: 24px;
+      }
+      .result-box.empty {
+        color: #a0aec0;
+        font-style: italic;
+      }
+      .stream-result {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .stream-number {
+        padding: 6px 12px;
+        background: #ebf8ff;
+        border: 1px solid #90cdf4;
+        border-radius: 4px;
+        color: #2c5282;
+        font-weight: 500;
+      }
+      .envelope-inspector {
+        margin-top: 32px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        padding: 20px 22px;
+        background: #ffffff;
+        box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+      }
+      .envelope-inspector-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .envelope-inspector-header h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .envelope-controls {
+        display: flex;
+        gap: 8px;
+      }
+      .small-button {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e0;
+        background: #ffffff;
+        color: #4a5568;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .small-button:hover {
+        background: #f7fafc;
+        border-color: #a0aec0;
+      }
+      .small-button:active {
+        transform: scale(0.97);
+      }
+      .envelope-log {
+        max-height: 600px;
+        overflow-y: auto;
+        transition: max-height 0.3s ease;
+      }
+      .envelope-log.collapsed {
+        max-height: 0;
+        overflow: hidden;
+      }
+      .envelope-entry {
+        margin-bottom: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .envelope-entry-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: #f7fafc;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .envelope-entry-header:hover {
+        background: #edf2f7;
+      }
+      .envelope-direction {
+        font-size: 18px;
+        line-height: 1;
+      }
+      .envelope-direction.inbound {
+        color: #38a169;
+      }
+      .envelope-direction.outbound {
+        color: #3182ce;
+      }
+      .envelope-meta {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        color: #4a5568;
+      }
+      .envelope-timestamp {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        color: #718096;
+      }
+      .envelope-type {
+        background: #edf2f7;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+      .envelope-expand-icon {
+        color: #a0aec0;
+        transition: transform 0.2s ease;
+      }
+      .envelope-entry.expanded .envelope-expand-icon {
+        transform: rotate(180deg);
+      }
+      .envelope-content {
+        display: none;
+        padding: 14px;
+        background: #fafafa;
+        border-top: 1px solid #e2e8f0;
+      }
+      .envelope-entry.expanded .envelope-content {
+        display: block;
+      }
+      .envelope-json {
+        margin: 0;
+        padding: 12px;
+        background: #1a202c;
+        color: #e2e8f0;
+        border-radius: 6px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .envelope-empty {
+        padding: 20px;
+        text-align: center;
+        color: #718096;
+        font-style: italic;
+      }
+      code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        background: #ebf8ff;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+    </style>
+    <script type="module" src="/env.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Naylence Biomes Example — Browser Client</h1>
+      <p>
+        A <span class="highlight">biome</span> is a logical enclave in the fabric: <span class="highlight">a sentinel plus</span> the internal agents and (optionally) child biomes it shields behind a single, secure boundary.
+      </p>
+      <p>
+        This example demonstrates hierarchical fabric topology with multiple biomes and comprehensive routing:
+      </p>
+      <ul class="feature-list">
+        <li>Main sentinel with two child sentinel biomes (tree topology)</li>
+        <li>Each child biome hosts a math agent</li>
+        <li>Deep-to-deep delegation: Agent in one biome calls agent in another</li>
+        <li>Client only connects to main sentinel, addresses route automatically</li>
+        <li>In real deployments, each biome is also a <span class="highlight">security enclave</span>; this example intentionally disables security so you can focus purely on topology and routing.</li>
+      </ul>
+      <div class="topology-diagram">
+        <img src="/distributed-biomes.svg" alt="Biomes Topology Diagram" />
+      </div>
+      <div class="operations-section">
+        <div class="operation-group">
+          <h3>Addition (Math Agent 1)</h3>
+          <div class="agent-info">Agent: math1@fame.fabric (in Child Biome 1)</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="addX">X</label>
+              <input type="number" id="addX" value="3" />
+            </div>
+            <span class="operator">+</span>
+            <div class="input-group">
+              <label for="addY">Y</label>
+              <input type="number" id="addY" value="4" />
+            </div>
+            <span class="equals">=</span>
+            <div id="addResult" class="result-inline empty">?</div>
+          </div>
+          <div class="button-row">
+            <button id="addButton" class="btn-primary">Add</button>
+          </div>
+        </div>
+
+        <div class="operation-group">
+          <h3>Multiplication (Math Agent 2 → Delegates to Agent 1)</h3>
+          <div class="agent-info">Agent: math2@fame.fabric (in Child Biome 2, delegates to math1@fame.fabric in Biome 1)</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="multiplyX">X</label>
+              <input type="number" id="multiplyX" value="6" />
+            </div>
+            <span class="operator">×</span>
+            <div class="input-group">
+              <label for="multiplyY">Y</label>
+              <input type="number" id="multiplyY" value="7" />
+            </div>
+            <span class="equals">=</span>
+            <div id="multiplyResult" class="result-inline empty">?</div>
+          </div>
+          <div class="button-row">
+            <button id="multiplyButton" class="btn-primary">Multiply</button>
+          </div>
+        </div>
+
+        <div class="operation-group">
+          <h3>Fibonacci Stream (Math Agent 2)</h3>
+          <div class="agent-info">Agent: math2@fame.fabric (in Child Biome 2)</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="fibN">N (terms)</label>
+              <input type="number" id="fibN" value="10" min="1" max="20" style="width: 80px;" />
+            </div>
+            <span class="equals">=</span>
+            <div id="fibResult" class="result-inline empty" style="flex: 1; min-width: 200px; text-align: left; padding-left: 16px;">?</div>
+          </div>
+          <div class="button-row">
+            <button id="fibButton" class="btn-secondary">Generate</button>
+          </div>
+        </div>
+      </div>
+      <div class="envelope-inspector">
+        <div class="envelope-inspector-header">
+          <h2>Envelope Inspector</h2>
+          <div class="envelope-controls">
+            <button id="clearEnvelopes" class="small-button" type="button">Clear</button>
+            <button id="toggleEnvelopes" class="small-button" type="button">▼ Show</button>
+          </div>
+        </div>
+        <div id="envelopeLog" class="envelope-log collapsed"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/browser-client.ts"></script>
+  </body>
+</html>

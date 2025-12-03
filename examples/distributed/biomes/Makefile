@@ -32,6 +32,11 @@ run-verbose:
 	FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk \
 	node --enable-source-maps dist/client.mjs
 
+# Run the browser client (requires services to be running)
+run-browser:
+	@echo "🌐 Starting browser client..."
+	@cd browser && npm install && npm run dev
+
 # View logs from all services
 logs:
 	docker compose logs -f
@@ -55,9 +60,10 @@ logs-agent2:
 # Clean up everything
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/node_modules browser/dist
+	@echo "🧹 Cleanup complete"
 
 # Rebuild from scratch
 rebuild: clean build
 
-.PHONY: install build start stop run run-verbose logs logs-main logs-child1 logs-child2 logs-agent1 logs-agent2 clean rebuild
+.PHONY: install build start stop run run-verbose run-browser logs logs-main logs-child1 logs-child2 logs-agent1 logs-agent2 clean rebuild
