@@ -1,0 +1,275 @@
+.App {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.app-logo {
+  display: block;
+  margin: 0 auto 16px;
+  height: 48px;
+  width: auto;
+}
+
+.App > h1 {
+  text-align: center;
+}
+
+.app-description {
+  text-align: center;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0 auto 24px;
+  max-width: 700px;
+}
+
+.nodes-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.arrows-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 180px;
+}
+
+.communication-arrows {
+  display: block;
+  color: #2b6cb0;
+}
+
+@media (max-width: 768px) {
+  .arrows-container {
+    display: none;
+  }
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 24px;
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  min-height: 480px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+}
+
+.card h2 {
+  margin: 12px 0;
+  font-size: 20px;
+  color: #2d3748;
+  text-align: center;
+}
+
+.read-the-docs {
+  color: #718096;
+}
+
+/* Sentinel Node Styles */
+.sentinel-icon-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  padding: 30px 0;
+  margin-top: -30px;
+  margin-bottom: -10px;
+}
+
+.sentinel-icon {
+  width: 120px;
+  height: 120px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sentinel-icon.pulse-active {
+  transform: scale(1.1);
+}
+
+.pulse-overlay {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-left: -60px;
+  border-radius: 50%;
+  border: 3px solid #38a169;
+  animation: pulse 0.6s ease-out;
+  pointer-events: none;
+  margin-top: -2px;
+}
+
+.messages-container {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.messages-title {
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.messages-list {
+  margin-top: 12px;
+  min-height: 190px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.message-item {
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: #f0fff4;
+  border-radius: 6px;
+  border-left: 4px solid #38a169;
+  font-size: 14px;
+}
+
+.message-item.new {
+  animation: slideIn 0.3s ease-out;
+}
+
+.message-text {
+  color: #276749;
+  font-weight: 500;
+}
+
+.message-timestamp {
+  color: #718096;
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+}
+
+/* Client Node Styles */
+.client-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.client-input-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.client-input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  font-size: 15px;
+  background: #fdfdfd;
+  font-family: inherit;
+}
+
+.client-input:focus {
+  outline: 2px solid #2b6cb0;
+  outline-offset: 0;
+  border-color: #2b6cb0;
+}
+
+.client-response {
+  margin-top: 12px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid #38a169;
+  background: #f0fff4;
+  color: #276749;
+  font-weight: 500;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 15px;
+}
+
+.status-active {
+  color: #38a169;
+  font-weight: 500;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.status-error {
+  color: #c53030;
+  font-weight: 500;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid #e53e3e;
+  background: #fff5f5;
+  margin: 12px 0;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

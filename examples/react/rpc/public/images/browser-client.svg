@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="browser-client.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="9.7812567"
+     inkscape:cx="41.456841"
+     inkscape:cy="27.450461"
+     inkscape:window-width="1448"
+     inkscape:window-height="824"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .bg           { fill: #eef4ff; }      /* soft circular background */
+      .window-bg    { fill: #f9fbff; }      /* inner window fill */
+      .window-stroke{ stroke: #2563eb; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .dot          { fill: #2563eb; }
+      .card-bg      { fill: #dbeafe; }
+      .card-stroke  { stroke: #2563eb; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .shape-fill   { fill: #2563eb; }
+    </style>
+  </defs>
+  <!-- Background circle -->
+  <circle
+     cx="32"
+     cy="32"
+     r="24"
+     class="bg"
+     id="circle1"
+     style="fill:#c6d9ff;fill-opacity:1" />
+  <!-- Browser window -->
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="33.146255"
+     rx="6.9568896"
+     class="window-bg"
+     id="rect1"
+     style="stroke-width:0.894805" />
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="33.146255"
+     rx="6.9568896"
+     class="window-stroke"
+     id="rect2" />
+  <!-- Top bar -->
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="10.128023"
+     rx="6.9568896"
+     class="window-stroke"
+     id="rect3" />
+  <line
+     x1="16.295879"
+     y1="25.503777"
+     x2="47.601883"
+     y2="25.503777"
+     class="window-stroke"
+     id="line3" />
+  <!-- Window controls -->
+  <ellipse
+     cx="21.513548"
+     cy="20.900131"
+     class="dot"
+     id="circle3"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <ellipse
+     cx="26.731215"
+     cy="20.900131"
+     class="dot"
+     id="circle4"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <ellipse
+     cx="31.948879"
+     cy="20.900131"
+     class="dot"
+     id="circle5"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <!-- Image card inside content area -->
+  <rect
+     x="19.774324"
+     y="28.265966"
+     width="24.349113"
+     height="16.573128"
+     rx="3.4784448"
+     class="card-bg"
+     id="rect5"
+     style="stroke-width:0.894805" />
+  <rect
+     x="19.774324"
+     y="28.265966"
+     width="24.349113"
+     height="16.573128"
+     rx="3.4784448"
+     class="card-stroke"
+     id="rect6" />
+  <!-- “Sun” -->
+  <ellipse
+     cx="24.122381"
+     cy="31.948881"
+     class="shape-fill"
+     id="circle6"
+     rx="1.9131447"
+     ry="2.0256047"
+     style="stroke-width:0.894805" />
+  <!-- “Mountains” -->
+  <path
+     d="m 21.513548,42.997635 5.217667,-9.207294 5.217667,9.207294 z"
+     class="shape-fill"
+     id="path6"
+     style="stroke-width:0.894805" />
+  <path
+     d="m 28.470438,42.997635 4.348056,-6.445106 4.348056,6.445106 z"
+     class="shape-fill"
+     id="path7"
+     style="stroke-width:0.894805" />
+</svg>
