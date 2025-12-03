@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := start
 
-DOCKER_IMAGE := naylence/agent-sdk-node:0.3.3
+DOCKER_IMAGE := naylence/agent-sdk-node:0.3.5
 
 init:
 	@echo "📦 Installing dependencies..."
