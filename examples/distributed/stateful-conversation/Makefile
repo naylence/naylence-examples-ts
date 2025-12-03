@@ -7,6 +7,7 @@ help:
 	@echo "  make start         - Start sentinel and chat-agent containers"
 	@echo "  make stop          - Stop all containers"
 	@echo "  make run           - Run interactive chat client"
+	@echo "  make run-browser   - Run browser chat client on http://localhost:3000"
 	@echo "  make test          - Run automated test client"
 	@echo "  make run-verbose   - Run with envelope debugging"
 	@echo "  make clean         - Stop containers"
@@ -53,9 +54,14 @@ run-verbose: check-openai-key
 	OPENAI_API_KEY=${OPENAI_API_KEY} \
 	node dist/client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@echo "⚠️  Make sure the chat agent is running (make start)"
+	cd browser && npm install && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/node_modules browser/dist
 	@echo "🧹 Cleanup complete"
 
-.PHONY: help check-openai-key build start stop run test run-verbose clean
+.PHONY: help check-openai-key build start stop run test run-verbose run-browser clean
