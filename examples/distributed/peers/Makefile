@@ -48,8 +48,12 @@ run-docker-verbose:
 	naylence/agent-sdk-node:0.3.0 \
 	node client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@cd browser && npm install && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning up..."
-	rm -rf dist node_modules
+	rm -rf dist node_modules browser/node_modules browser/dist
 
-.PHONY: start stop run run-verbose run-docker run-docker-verbose clean
+.PHONY: start stop run run-verbose run-docker run-docker-verbose run-browser clean
