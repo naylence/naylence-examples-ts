@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := start
 
-DOCKER_IMAGE := naylence/agent-sdk-node:0.3.3
+DOCKER_IMAGE := naylence/agent-sdk-node:0.3.5
 
 # Install dependencies
 install:
@@ -53,8 +53,13 @@ run-docker-verbose:
 	$(DOCKER_IMAGE) \
 	node client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@echo "⚠️  Make sure the echo agent is running (make start)"
+	cd browser && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/dist browser/node_modules
 
-.PHONY: start stop build run run-verbose run-docker run-docker-verbose clean install
+.PHONY: start stop build run run-verbose run-docker run-docker-verbose run-browser clean install

@@ -37,6 +37,14 @@ Expected output:
 Hello, World!
 ```
 
+### Browser Client
+
+- Implemented in [`browser/src/browser-client.ts`](browser/src/browser-client.ts).
+- A browser-based client that connects to the echo agent via WebSocket.
+- Uses the same fabric connection mechanism as the Node.js client.
+- Provides a simple UI to send messages and view responses.
+- See [`browser/README.md`](browser/README.md) for more details.
+
 ---
 
 ## Quick start
@@ -52,7 +60,13 @@ make start       # 🚀 installs deps, builds, and brings up the stack (sentinel
 Run the sample client against the echo agent:
 
 ```bash
-make run         # ▶️ executes client
+make run         # ▶️ executes Node.js client
+```
+
+Or run the browser client:
+
+```bash
+make run-browser # 🌐 starts browser client on http://localhost:3000
 ```
 
 Shut down when done:
