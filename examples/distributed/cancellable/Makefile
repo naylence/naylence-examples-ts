@@ -2,7 +2,7 @@
 
 # Install dependencies
 install:
-	npm install --legacy-peer-deps
+	npm install
 
 # Build TypeScript code
 build: install
@@ -29,7 +29,14 @@ run-verbose:
 	FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk \
 	node --enable-source-maps dist/client.mjs
 
+run-browser:
+	@echo "🌐 Starting browser client on http://localhost:3000"
+	@echo "⚠️  Make sure the sentinel and cancellable agent are running (make start)"
+	cd browser && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
-	@rm -rf node_modules dist
+	@rm -rf node_modules dist browser/dist browser/node_modules
+
+.PHONY: start stop build run run-verbose run-browser clean install
 

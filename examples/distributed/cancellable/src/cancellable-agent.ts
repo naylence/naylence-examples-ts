@@ -27,7 +27,19 @@ class CancellableAgent extends BackgroundTaskAgent {
 
   async runBackgroundTask(params: TaskSendParams): Promise<void> {
     const maxSteps = 10;
-    for (let i = 1; i < maxSteps; i++) {
+    if (await this.getTaskState(params.id) === TaskState.CANCELED) {
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const initialArtifact: Artifact = {
+      parts: [{ type: "data", data: { progress: 0 } }],
+      index: 0,
+    };
+    await this.updateTaskArtifact(params.id, initialArtifact);
+
+    for (let i = 1; i <= maxSteps; i++) {
       const taskState = await this.getTaskState(params.id);
       if (taskState === TaskState.CANCELED) {
         break;

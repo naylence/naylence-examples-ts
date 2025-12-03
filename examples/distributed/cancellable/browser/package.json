@@ -1,0 +1,20 @@
+{
+  "name": "@naylence-examples/distributed-cancellable-browser",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@naylence/agent-sdk": "^0.3.5",
+    "@naylence/runtime": "file:../../../../../naylence-runtime-ts/naylence-runtime-0.3.5-test.911.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.10"
+  }
+}

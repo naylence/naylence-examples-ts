@@ -58,6 +58,14 @@ Run the sample client against the cancellable agent:
 make run         # ▶️ executes client
 ```
 
+Prefer a UI? Launch the browser client in another terminal:
+
+```bash
+make run-browser  # 🌐 opens http://localhost:3000 with start + cancel controls
+```
+
+The page starts a task, streams its progress on a realtime bar, and lets you cancel explicitly.
+
 Shut down when done:
 
 ```bash
