@@ -50,8 +50,12 @@ run-docker-verbose:
 	node:24-bullseye-slim \
 	sh -c "npm install && npm run build && node dist/client.mjs"
 
+run-browser:
+	@echo "🌐 Starting browser client (requires sentinel + echo-agent running)"
+	@cd browser && npm install && npm run dev
+
 clean: stop
 	@echo "🧹 Cleaning build artifacts"
 	@rm -rf node_modules dist
 
-.PHONY: start stop build run run-verbose run-docker run-docker-verbose clean install
+.PHONY: start stop build run run-verbose run-docker run-docker-verbose run-browser clean install
