@@ -2,7 +2,7 @@
 
 # Naylence Examples (TypeScript)
 
-This repository is a tour of Naylence's Agent SDK and runtime patterns, from "hello world" agents to multi-agent orchestration and production-grade security. Use it as a workbook: run each example, skim its code, and move to the next.
+This repository is a tour of Naylence's Agent SDK and runtime patterns, from "hello world" agents to multi-agent orchestration and production-grade security. Use it as a workbook: run each example, skim its code, and move to the next. Many examples ship both CLI clients and browser UIs—several distributed samples include a browser client alongside the CLI, and there are dedicated browser-only ports in `examples/react` and `examples/vue`.
 
 ---
 
@@ -31,6 +31,7 @@ examples/
   persistence/
     agent-state/
     storage-provider/
+  react/                      # React UI demos (hello, hello-3node, rpc)
   delivery/
     agent-crash-recovery/
     retry-on-no-ack-received/
@@ -40,6 +41,7 @@ examples/
     advanced/
     http-connector/
     stickiness/
+  vue/                        # Vue UI demos (hello, hello-3node, rpc)
 ```
 
 **Conventions**
@@ -199,6 +201,12 @@ If you prefer not to use `make`, see each folder's `docker-compose.yml` and `REA
 * **biomes/** — hierarchical (parent/child) sentinels; deep-to-deep delegation across child biomes
 * **peers/** — peer-linked sentinels; calls hop across the peer link
 * **stateful-conversation/** — conversation agent with persistent context/state
+
+### `react/` and `vue/`
+
+* **hello/** — client + sentinel + hello agent (UI)
+* **hello-3node/** — client → sentinel → agent chain (UI)
+* **rpc/** — math RPC with streaming Fibonacci (UI)
 
 ### `persistence/`
 
