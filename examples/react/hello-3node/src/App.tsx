@@ -42,6 +42,11 @@ function App() {
         This React example demonstrates three fabric nodes (Client → Sentinel → Agent) communicating via BroadcastChannel,
         running entirely in the browser.
       </p>
+      <p className="app-source">
+        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello-3node" target="_blank" rel="noreferrer">
+          View source on GitHub
+        </a>
+      </p>
       
       <div className="nodes-container three-node">
         {/* Client - makes requests */}

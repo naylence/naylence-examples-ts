@@ -23,8 +23,16 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
   // Auto-scroll to bottom when new logs arrive
   useEffect(() => {
     if (operationLogs.length === 0) return;
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    scrollLogToBottom();
   }, [operationLogs]);
+
+  const scrollLogToBottom = () => {
+    const endEl = messagesEndRef.current;
+    const container = endEl?.parentElement;
+    if (!endEl || !container) return;
+    if (container.scrollHeight <= container.clientHeight) return;
+    container.scrollTop = container.scrollHeight;
+  };
 
   useFabricEffect((fabric) => {
     const agent = new MathAgent();
@@ -56,7 +64,7 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
       setPulseActive(true);
       // Scroll after DOM update without jumping to the page top
       requestAnimationFrame(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        scrollLogToBottom();
       });
       setTimeout(() => setPulseActive(false), 600);
     }

@@ -17,9 +17,18 @@ export function AgentNode({ onReady }: AgentNodeProps) {
   const [pulseActive, setPulseActive] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const scrollMessagesToBottom = () => {
+    const endEl = messagesEndRef.current;
+    const container = endEl?.parentElement;
+    if (!endEl || !container) return;
+    if (container.scrollHeight <= container.clientHeight) return;
+    container.scrollTop = container.scrollHeight;
+  };
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (receivedMessages.length === 0) return;
+    scrollMessagesToBottom();
   }, [receivedMessages]);
 
   useFabricEffect((fabric) => {
@@ -31,7 +40,9 @@ export function AgentNode({ onReady }: AgentNodeProps) {
       const timestamp = Date.now();
       setReceivedMessages(prev => [...prev.slice(-4), { message, timestamp }]);
       setPulseActive(true);
-      
+      requestAnimationFrame(() => {
+        scrollMessagesToBottom();
+      });
       // Reset pulse after animation
       setTimeout(() => setPulseActive(false), 600);
     });

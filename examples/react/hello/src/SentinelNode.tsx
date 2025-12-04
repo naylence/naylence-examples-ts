@@ -17,9 +17,17 @@ export function SentinelNode({ onReady }: SentinelNodeProps) {
   const [pulseActive, setPulseActive] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const scrollMessagesToBottom = () => {
+    const endEl = messagesEndRef.current;
+    const container = endEl?.parentElement;
+    if (!endEl || !container) return;
+    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+  };
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (receivedMessages.length === 0) return;
+    scrollMessagesToBottom();
   }, [receivedMessages]);
 
   useFabricEffect((fabric) => {
@@ -32,7 +40,9 @@ export function SentinelNode({ onReady }: SentinelNodeProps) {
       const timestamp = Date.now();
       setReceivedMessages(prev => [...prev.slice(-4), { message, timestamp }]);
       setPulseActive(true);
-      
+      requestAnimationFrame(() => {
+        scrollMessagesToBottom();
+      });
       // Reset pulse after animation
       setTimeout(() => setPulseActive(false), 600);
     });

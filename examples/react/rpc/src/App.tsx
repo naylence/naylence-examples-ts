@@ -24,6 +24,11 @@ function App() {
       <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
       <h1>Naylence React RPC Example</h1>
       <p className="app-description">Math agent with add, multiply, and fibonacci stream</p>
+      <p className="app-source">
+        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/rpc" target="_blank" rel="noreferrer">
+          View source on GitHub
+        </a>
+      </p>
       
       <div className="nodes-container">
         {/* Client connects and calls the service - only after sentinel is ready */}

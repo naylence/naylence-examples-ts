@@ -24,6 +24,21 @@
   max-width: 700px;
 }
 
+.app-source {
+  text-align: center;
+  margin: -8px 0 24px;
+}
+
+.app-source a {
+  color: #2b6cb0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-source a:hover {
+  text-decoration: underline;
+}
+
 .nodes-container {
   display: flex;
   gap: 20px;
@@ -53,11 +68,11 @@
 }
 
 .card {
-  padding: 24px;
+  padding: 24px 24px 16px;
   flex: 1;
   min-width: 300px;
   max-width: 500px;
-  min-height: 440px;
+  min-height: 410px;
   background: #ffffff;
   border-radius: 10px;
   border: 1px solid #e2e8f0;
@@ -163,7 +178,7 @@
 }
 
 .sentinel-spacer {
-  height: 24px;
+  height: 12px;
 }
 
 /* Client Node Styles */
