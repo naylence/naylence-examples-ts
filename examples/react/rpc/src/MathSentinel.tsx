@@ -8,7 +8,7 @@ interface MathSentinelProps {
 
 interface OperationLog {
   operation: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
   timestamp: number;
 }
 
@@ -47,7 +47,7 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
       yield* originalFib(params);
     };
 
-    function logOperation(operation: string, params: Record<string, any>) {
+    function logOperation(operation: string, params: Record<string, unknown>) {
       const timestamp = Date.now();
       setOperationLogs(prev => [...prev.slice(-4), { operation, params, timestamp }]);
       setPulseActive(true);

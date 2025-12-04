@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFabric, useRemoteAgent } from '@naylence/react';
+import type { MathAgent } from './MathAgent';
 
 export function MathClient() {
   const { fabric, error } = useFabric();
@@ -7,47 +8,37 @@ export function MathClient() {
   const [y, setY] = useState(4);
   const [n, setN] = useState(10);
   const [result, setResult] = useState<string | null>(null);
-  const [addLoading, setAddLoading] = useState(false);
-  const [multiplyLoading, setMultiplyLoading] = useState(false);
-  const [fibLoading, setFibLoading] = useState(false);
   
   // Use the useRemoteAgent hook to get the agent proxy
-  const mathAgent = useRemoteAgent<any>('math@fame.fabric');
+  const mathAgent = useRemoteAgent<MathAgent>('math@fame.fabric');
 
   const handleAdd = async () => {
     if (!mathAgent) return;
     
-    setAddLoading(true);
     try {
       const sum = await mathAgent.add({ x, y });
       setResult(`${x} + ${y} = ${sum}`);
     } catch (err) {
       console.error('Add operation failed:', err);
       alert(`Error: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setAddLoading(false);
     }
   };
 
   const handleMultiply = async () => {
     if (!mathAgent) return;
     
-    setMultiplyLoading(true);
     try {
       const product = await mathAgent.multiply({ x, y });
       setResult(`${x} × ${y} = ${product}`);
     } catch (err) {
       console.error('Multiply operation failed:', err);
       alert(`Error: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setMultiplyLoading(false);
     }
   };
 
   const handleFibStream = async () => {
     if (!mathAgent) return;
     
-    setFibLoading(true);
     try {
       const fibStream = await mathAgent.fib_stream({ _stream: true, n });
       const results: number[] = [];
@@ -60,8 +51,6 @@ export function MathClient() {
     } catch (err) {
       console.error('Fibonacci stream failed:', err);
       alert(`Error: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      setFibLoading(false);
     }
   };
 
