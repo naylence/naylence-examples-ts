@@ -12,6 +12,8 @@ interface OperationLog {
   timestamp: number;
 }
 
+const MAX_LOGS = 50;
+
 export function MathSentinel({ onReady }: MathSentinelProps) {
   const { fabric, error } = useFabric();
   const [operationLogs, setOperationLogs] = useState<OperationLog[]>([]);
@@ -20,7 +22,8 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
 
   // Auto-scroll to bottom when new logs arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (operationLogs.length === 0) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [operationLogs]);
 
   useFabricEffect((fabric) => {
@@ -49,8 +52,12 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
 
     function logOperation(operation: string, params: Record<string, unknown>) {
       const timestamp = Date.now();
-      setOperationLogs(prev => [...prev.slice(-4), { operation, params, timestamp }]);
+      setOperationLogs(prev => [...prev.slice(-(MAX_LOGS - 1)), { operation, params, timestamp }]);
       setPulseActive(true);
+      // Scroll after DOM update without jumping to the page top
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
       setTimeout(() => setPulseActive(false), 600);
     }
 
