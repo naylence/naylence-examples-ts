@@ -47,7 +47,7 @@ export function ClientNode() {
             />
             <button 
               onClick={sayHello} 
-              disabled={loading || !helloAgent}
+              disabled={/*loading || */ !helloAgent}
             >
                Send
             </button>

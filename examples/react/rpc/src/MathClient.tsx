@@ -98,13 +98,13 @@ export function MathClient() {
             <div className="button-group">
               <button 
                 onClick={handleAdd} 
-                disabled={addLoading || !mathAgent}
+                disabled={/*addLoading || */ !mathAgent}
               >
                 Add
               </button>
               <button 
                 onClick={handleMultiply} 
-                disabled={multiplyLoading || !mathAgent}
+                disabled={/*multiplyLoading || */ !mathAgent}
               >
                 Multiply
               </button>
@@ -122,7 +122,7 @@ export function MathClient() {
             
             <button 
               onClick={handleFibStream} 
-              disabled={fibLoading || !mathAgent}
+              disabled={/*fibLoading || */ !mathAgent}
               className="fib-button"
             >
               Fibonacci Stream
