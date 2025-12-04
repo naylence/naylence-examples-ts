@@ -22,7 +22,7 @@ function App() {
   return (
     <div className="App">
       <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
-      <h1>Naylence React RPC Example</h1>
+      <h1>Naylence React - RPC Example</h1>
       <p className="app-description">Math agent with add, multiply, and fibonacci stream</p>
       <p className="app-source">
         <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/rpc" target="_blank" rel="noreferrer">

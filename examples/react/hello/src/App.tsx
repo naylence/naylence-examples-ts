@@ -22,7 +22,7 @@ function App() {
   return (
     <div className="App">
       <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
-      <h1>Naylence React Hello World</h1>
+      <h1>Naylence React - Hello World Example</h1>
       <p className="app-description">
         This React example demonstrates two fabric nodes communicating via BroadcastChannel with an agent service,
         running entirely in the browser.
