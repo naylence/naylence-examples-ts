@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="sentinel.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.6669335"
+     inkscape:cx="30.792668"
+     inkscape:cy="30.96913"
+     inkscape:window-width="1360"
+     inkscape:window-height="872"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .bg { fill: #e0f7f5; }
+      .shield { stroke: #0f766e; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .house-stroke { stroke: #0f766e; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .house-fill { fill: #ecfeff; }
+    </style>
+  </defs>
+  <!-- Background circle -->
+  <circle
+     cx="32"
+     cy="32"
+     r="24"
+     class="bg"
+     id="circle1" />
+  <!-- Wider, centered shield -->
+  <path
+     class="shield"
+     d="M 32,14.09069 18.326068,22.050383 V 32 c 0,7.959694 4.557977,13.929464 13.673932,17.909311 C 41.115954,45.929464 45.673932,39.959694 45.673932,32 v -9.949617 z"
+     id="path1" />
+  <!-- House (node) moved up inside the shield -->
+  <!-- Roof -->
+  <path
+     d="m 26,28 6,-5 6,5"
+     class="house-stroke"
+     id="path2" />
+  <!-- Body -->
+  <rect
+     x="26"
+     y="28"
+     width="12"
+     height="10"
+     rx="2"
+     class="house-fill"
+     id="rect2" />
+  <rect
+     x="26"
+     y="28"
+     width="12"
+     height="10"
+     rx="2"
+     class="house-stroke"
+     id="rect3" />
+</svg>

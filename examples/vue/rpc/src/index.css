@@ -1,0 +1,77 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f7fafc;
+  color: #1a202c;
+}
+
+#app {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 24px 48px;
+}
+
+a {
+  font-weight: 500;
+  color: #2b6cb0;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #2c5282;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #2d3748;
+}
+
+p {
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(120deg, #2b6cb0, #2c5282);
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(43, 108, 176, 0.28);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  font-family: inherit;
+  will-change: transform;
+}
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(43, 108, 176, 0.34);
+}
+button:active:not(:disabled) {
+  transform: translateY(0);
+  transition: transform 0.05s ease;
+}
+button:disabled {
+  cursor: not-allowed;
+  background: #a0aec0;
+  box-shadow: none;
+  transform: translateY(0);
+}
+button:focus,
+button:focus-visible {
+  outline: 2px solid #2b6cb0;
+  outline-offset: 2px;
+}
+
+code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  background: #ebf8ff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
