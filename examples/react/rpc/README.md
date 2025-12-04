@@ -2,6 +2,8 @@
 
 This example demonstrates using the Naylence React integration with a MathAgent that exposes RPC operations using the `@operation` decorator.
 
+**View it live at https://naylence-examples-ts-rpc.pages.dev**
+
 ## Features
 
 - **MathAgent** with three operations:

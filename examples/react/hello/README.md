@@ -2,6 +2,8 @@
 
 This example shows the smallest possible React application that wires up the Naylence Fabric using the `@naylence/react` provider hooks. It renders a single component that connects to the Fame Fabric, demonstrates the `useFabric`, `useFabricEffect`, and `useRemoteAgent` hooks, and logs activity in the browser console. **Everything runs inside the browser—no local Node server or backend fabric node is required—so you can observe the full lifecycle using only DevTools.**
 
+**View it live at https://naylence-examples-ts-hello.pages.dev/**
+
 ## Prerequisites
 
 - Node.js 18+

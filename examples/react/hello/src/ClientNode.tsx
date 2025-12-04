@@ -28,7 +28,9 @@ export function ClientNode() {
 
   return (
     <div className="card">
-      <img src="/images/browser-client.svg" alt="Browser Client" className="client-icon" />
+      <div className="client-icon-container">
+        <img src="/images/browser-client.svg" alt="Browser Client" className="client-icon" />
+      </div>
       <h2>Client</h2>
       {error != null && <p className="status-error">Error: {String(error)}</p>}
       {fabric && (
