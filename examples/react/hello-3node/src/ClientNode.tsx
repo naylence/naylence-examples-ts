@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useFabric, useRemoteAgent } from '@naylence/react';
+import type { HelloAgent } from './HelloAgent';
 
 export function ClientNode() {
   const { fabric, error } = useFabric();
   const [message, setMessage] = useState('Hello, World!');
   const [response, setResponse] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   
   // Use the useRemoteAgent hook to get the agent proxy
-  const helloAgent = useRemoteAgent<any>('hello@fame.fabric');
+  const helloAgent = useRemoteAgent<HelloAgent>('hello@fame.fabric');
 
   const sayHello = async () => {
     if (!helloAgent) return;
     
-    setLoading(true);
     try {
       // Call the agent's runTask method
       const result = await helloAgent.runTask({ message });
@@ -21,9 +20,6 @@ export function ClientNode() {
     } catch (err) {
       console.error('Agent call failed:', err);
       alert(`Error: ${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-      // Small delay to prevent flickering
-      setTimeout(() => setLoading(false), 100);
     }
   };
 

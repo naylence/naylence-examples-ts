@@ -7,7 +7,7 @@ export class HelloAgent extends BaseAgent {
     this.onMessageReceived = callback;
   }
 
-  async runTask(payload: any): Promise<any> {
+  async runTask(payload: { message: string }): Promise<string> {
     const message = payload.message;
     
     // Notify that a message was received
