@@ -27,6 +27,11 @@ function App() {
         This React example demonstrates two fabric nodes communicating via BroadcastChannel with an agent service,
         running entirely in the browser.
       </p>
+      <p className="app-source">
+        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello" target="_blank" rel="noreferrer">
+          View source on GitHub
+        </a>
+      </p>
       
       <div className="nodes-container">
         {/* Client connects and calls the service - only after sentinel is ready */}
@@ -63,4 +68,3 @@ function App() {
 }
 
 export default App;
-
