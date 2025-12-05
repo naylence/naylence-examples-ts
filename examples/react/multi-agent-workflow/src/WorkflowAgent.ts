@@ -1,31 +1,29 @@
 import { BaseAgent, Agent } from '@naylence/agent-sdk';
-import type { WorkflowResult, TextStats, KeywordsResult, SentencesResult } from './config';
+import type { WorkflowResult } from './config';
 import { STATS_AGENT_ADDR, KEYWORDS_AGENT_ADDR, SENTENCES_AGENT_ADDR } from './config';
 
 export class WorkflowAgent extends BaseAgent {
   async runTask(payload: { text: string }): Promise<WorkflowResult> {
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
     const text = payload.text || '';
+
+    // Use the agent's own fabric (set during registration) for outbound calls
+    const agentFabric = this.fabric;
+    if (!agentFabric) {
+      throw new Error('WorkflowAgent fabric not set - agent may not be registered');
+    }
     
-    // Fan out to all worker agents in parallel using Agent.broadcast
+    // Fan out to all worker agents using broadcast with explicit fabric
     const results = await Agent.broadcast(
       [STATS_AGENT_ADDR, KEYWORDS_AGENT_ADDR, SENTENCES_AGENT_ADDR],
-      { text }
+      { text },
+      { fabric: agentFabric }
     );
-    
-    // Extract results from broadcast response
-    // broadcast returns [[address, result], ...]
-    const stats = results[0][1] as TextStats;
-    const keywords = results[1][1] as KeywordsResult;
-    const sentences = results[2][1] as SentencesResult;
     
     // Return aggregated result
     return {
-      stats,
-      keywords,
-      sentences,
+      stats: results[0][1],
+      keywords: results[1][1],
+      sentences: results[2][1],
     };
   }
 }

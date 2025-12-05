@@ -52,7 +52,6 @@ export function AgentNode({
     };
     
     fabric.serve(agent, agentAddress).then(() => {
-      console.log(`${agentName} served at: ${agentAddress}`);
       onReady?.();
     });
 

@@ -6,13 +6,13 @@ import { useNodeEnvelopeLogger } from './useNodeEnvelopeLogger';
 import { useEnvelopeContext } from './EnvelopeContext';
 
 const SAMPLE_TEXT = `The quick brown fox jumps over the lazy dog. This classic pangram contains every letter of the English alphabet. It has been used for decades to test typewriters and fonts. The sentence is memorable and easy to type. Many people use it for keyboard practice and design work.`;
+const MAX_LENGTH = 5000;
 
 export function ClientNode() {
   const { fabric, error } = useFabric();
   const [text, setText] = useState('');
   const [result, setResult] = useState<WorkflowResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [detailsExpanded, setDetailsExpanded] = useState(false);
   
   const nodeId = 'Client';
   useNodeEnvelopeLogger(nodeId);
@@ -61,7 +61,12 @@ export function ClientNode() {
           <p className="status-active">✅ Connected</p>
           
           <div className="client-input-container">
-            <label htmlFor="text-input" className="input-label">Enter text to analyze:</label>
+            <div className="input-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <label htmlFor="text-input" className="input-label">Enter text to analyze:</label>
+              <span style={{ fontSize: '11px', color: text.length >= MAX_LENGTH ? '#e53e3e' : '#718096' }}>
+                {text.length}/{MAX_LENGTH}
+              </span>
+            </div>
             <textarea
               id="text-input"
               value={text}
@@ -70,6 +75,7 @@ export function ClientNode() {
               placeholder="Type or paste text here..."
               className="client-textarea"
               rows={4}
+              maxLength={MAX_LENGTH}
             />
             <div className="button-group">
               <button 
@@ -106,20 +112,7 @@ export function ClientNode() {
                   </div>
                 </div>
                 
-                {/* Collapsible details */}
-                <button 
-                  className="details-toggle"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDetailsExpanded(!detailsExpanded);
-                  }}
-                >
-                  <span>{detailsExpanded ? '▾' : '▸'}</span>
-                  <span>{detailsExpanded ? 'Hide details' : 'Show details'}</span>
-                </button>
-                
-                {detailsExpanded && (
-                  <div className="details-content">
+                <div className="details-content">
                     <div className="result-section">
                       <h4>🔑 Top Keywords</h4>
                       {result.keywords.topWords.length > 0 ? (
@@ -154,7 +147,6 @@ export function ClientNode() {
                       )}
                     </div>
                   </div>
-                )}
               </div>
             ) : (
               <div className="results-placeholder">

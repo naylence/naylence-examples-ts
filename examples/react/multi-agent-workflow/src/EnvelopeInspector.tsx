@@ -41,7 +41,7 @@ function LogEntry({ entry }: { entry: EnvelopeLogEntry }) {
         <div className="envelope-meta">
           <span className="envelope-timestamp">{formatTimestamp(entry.timestamp)}</span>
           <span className="envelope-type">
-            {entry.direction === 'inbound' ? `← ${envelopeType}` : `→ ${envelopeType}`}
+            {envelopeType}
           </span>
         </div>
         <span className="envelope-expand-icon">▼</span>

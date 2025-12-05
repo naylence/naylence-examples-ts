@@ -16,7 +16,6 @@ export function SentinelNode({ onReady }: SentinelNodeProps) {
 
   useFabricEffect(() => {
     // Sentinel is ready as soon as fabric is initialized
-    console.log('Sentinel is ready');
     onReady?.();
   }, []);
 

@@ -16,12 +16,12 @@
   justify-content: center;
   gap: 12px;
   font-size: 28px;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   color: #2d3748;
 }
 
 .app-logo {
-  height: 32px;
+  height: 48px;
   width: auto;
   flex-shrink: 0;
   position: relative;
@@ -54,7 +54,7 @@
 /* Topology Layout */
 .topology-container {
   display: grid;
-  grid-template-columns: 400px 1fr 250px 1fr 400px;
+  grid-template-columns: 450px 1fr 250px 1fr 300px;
   gap: 16px;
   margin-top: 16px;
   align-items: center;
@@ -71,7 +71,7 @@
 }
 
 .client-column {
-  width: 400px;
+  width: 450px;
   justify-content: center;
   align-items: center;
 }
@@ -83,8 +83,8 @@
 }
 
 .agents-column {
-  width: 400px;
-  max-width: 400px;
+  width: 300px;
+  max-width: 300px;
   gap: 12px;
   align-items: stretch;
 }
@@ -102,7 +102,7 @@
   color: #2b6cb0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1350px) {
   .topology-container {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -160,21 +160,21 @@
 
 /* Client Card */
 .client-card {
-  width: 400px;
-  min-width: 400px;
-  max-width: 400px;
+  width: 450px;
+  min-width: 450px;
+  max-width: 450px;
   padding: 16px 20px;
 }
 
 .client-icon-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .client-icon {
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   display: block;
 }
 
@@ -188,7 +188,7 @@
 .input-label {
   font-weight: 500;
   color: #4a5568;
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: -4px;
 }
 
@@ -196,11 +196,11 @@
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #cbd5e0;
-  font-size: 13px;
+  font-size: 14px;
   background: #fdfdfd;
   font-family: inherit;
   resize: vertical;
-  min-height: 60px;
+  min-height: 70px;
 }
 
 .client-textarea:focus {
@@ -261,7 +261,7 @@
 
 .results-content,
 .results-placeholder {
-  min-height: 200px;
+  min-height: 320px;
 }
 
 .results-placeholder {
@@ -412,9 +412,10 @@
 
 .node-info {
   color: #718096;
-  font-size: 0.85em;
+  font-size: 12px;
   margin-top: 8px;
   text-align: center;
+  font-style: italic;
 }
 
 /* Agent Cards */
