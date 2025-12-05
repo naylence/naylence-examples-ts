@@ -74,7 +74,7 @@ export function ClientNode() {
               onClick={(e) => e.stopPropagation()} // Prevent card selection when typing
               placeholder="Type or paste text here..."
               className="client-textarea"
-              rows={4}
+              rows={6}
               maxLength={MAX_LENGTH}
             />
             <div className="button-group">

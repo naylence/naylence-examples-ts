@@ -200,7 +200,7 @@
   background: #fdfdfd;
   font-family: inherit;
   resize: vertical;
-  min-height: 70px;
+  min-height: 120px;
 }
 
 .client-textarea:focus {
@@ -220,6 +220,8 @@
   background: linear-gradient(120deg, #2b6cb0, #2c5282);
   color: white;
   font-size: 13px;
+  min-width: 140px;
+  text-align: center;
 }
 
 .secondary-button {
@@ -261,7 +263,7 @@
 
 .results-content,
 .results-placeholder {
-  min-height: 320px;
+  min-height: 270px;
 }
 
 .results-placeholder {
