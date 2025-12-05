@@ -2,6 +2,8 @@
 
 A browser-only React example demonstrating multi-agent orchestration with the Naylence framework. This example showcases a text analysis workflow where a workflow agent coordinates multiple worker agents to analyze text in parallel.
 
+**View it live at https://naylence-examples-ts-multi-agent.pages.dev**
+
 ## Architecture
 
 This example implements a distributed agent topology that runs entirely in the browser:
