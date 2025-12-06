@@ -32,7 +32,7 @@
   display: flex;
   gap: 20px;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   flex-wrap: wrap;
   margin-top: 24px;
 }
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-top: 180px;
+  margin-top: 0px;
 }
 
 .communication-arrows {
