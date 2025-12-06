@@ -3,11 +3,14 @@ import { FabricProvider } from '@naylence/react';
 import { MathSentinel } from './MathSentinel';
 import { MathClient } from './MathClient';
 import { sentinelConfig, clientConfig } from './config';
+import { EnvelopeInspector } from './EnvelopeInspector';
+import { useEnvelopeContext } from './EnvelopeContext';
 import './App.css';
 
 function App() {
   const [sentinelReady, setSentinelReady] = useState(false);
   const [clientReady, setClientReady] = useState(false);
+  const { debugMode, setDebugMode } = useEnvelopeContext();
 
   // Delay client start to avoid race conditions
   useEffect(() => {
@@ -21,13 +24,26 @@ function App() {
 
   return (
     <div className="App">
-      <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
-      <h1>Naylence React - RPC Example</h1>
-      <p className="app-description">Math agent with add, multiply, and fibonacci stream</p>
+      <div className="app-header">
+        <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
+        <h1>Naylence React - RPC Example</h1>
+      </div>
+      <p className="app-description">
+        This example demonstrates a client communicating with an agent running on a sentinel, 
+        sending RPC requests and RPC streaming requests, all within the browser.
+      </p>
       <p className="app-source">
         <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/rpc" target="_blank" rel="noreferrer">
           View source on GitHub
         </a>
+        {' • '}
+        <button 
+          onClick={() => setDebugMode(!debugMode)} 
+          className="link-button"
+          style={{ fontSize: 'inherit' }}
+        >
+          {debugMode ? 'Disable Debug' : 'Enable Debug'}
+        </button>
       </p>
       
       <div className="nodes-container">
@@ -60,6 +76,8 @@ function App() {
           <MathSentinel onReady={() => setSentinelReady(true)} />
         </FabricProvider>
       </div>
+
+      <EnvelopeInspector />
     </div>
   );
 }

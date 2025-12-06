@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { FabricProvider } from '@naylence/react';
 import { SentinelNode } from './SentinelNode';
 import { ClientNode } from './ClientNode';
+import { EnvelopeInspector } from './EnvelopeInspector';
+import { useEnvelopeContext } from './EnvelopeContext';
 import { sentinelConfig, clientConfig } from './config-in-page-connector';
 import './App.css';
 
 function App() {
   const [sentinelReady, setSentinelReady] = useState(false);
   const [clientReady, setClientReady] = useState(false);
+  const { debugMode, setDebugMode } = useEnvelopeContext();
 
   // Delay client start to avoid race conditions
   useEffect(() => {
@@ -21,17 +24,29 @@ function App() {
 
   return (
     <div className="App">
-      <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
-      <h1>Naylence React - Hello World Example</h1>
-      <p className="app-description">
-        This React example demonstrates two fabric nodes communicating via BroadcastChannel with an agent service,
-        running entirely in the browser.
-      </p>
-      <p className="app-source">
-        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello" target="_blank" rel="noreferrer">
-          View source on GitHub
-        </a>
-      </p>
+      <div className="app-header">
+        <h1 className="app-title">
+          <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
+          Naylence React - Hello World Example
+        </h1>
+        <p className="app-description">
+          This React example demonstrates two fabric nodes communicating via BroadcastChannel with an agent service,
+          running entirely in the browser.
+        </p>
+        <p className="app-source">
+          <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello" target="_blank" rel="noreferrer">
+            View source on GitHub
+          </a>
+          {' • '}
+          <button 
+            onClick={() => setDebugMode(!debugMode)} 
+            className="link-button"
+            style={{ fontSize: 'inherit' }}
+          >
+            {debugMode ? 'Disable Debug' : 'Enable Debug'}
+          </button>
+        </p>
+      </div>
       
       <div className="nodes-container">
         {/* Client connects and calls the service - only after sentinel is ready */}
@@ -63,6 +78,8 @@ function App() {
           <SentinelNode onReady={() => setSentinelReady(true)} />
         </FabricProvider>
       </div>
+
+      <EnvelopeInspector />
     </div>
   );
 }

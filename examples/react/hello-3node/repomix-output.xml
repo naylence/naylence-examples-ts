@@ -1,0 +1,1676 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+4. Repository files, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+<additional_info>
+
+</additional_info>
+
+</file_summary>
+
+<directory_structure>
+public/
+  images/
+    agent.svg
+    browser-client.svg
+    naylence.svg
+    react.svg
+    sentinel.svg
+    vite.svg
+src/
+  AgentNode.tsx
+  App.css
+  App.tsx
+  ClientNode.tsx
+  config-3node-broadcast.ts
+  config-3node.ts
+  HelloAgent.ts
+  index.css
+  main.tsx
+  SentinelNode.tsx
+eslint.config.js
+index.html
+Makefile
+package.json
+README.md
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="public/images/agent.svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .bg { fill: #f4e9ff; }
+      .stroke-main { stroke: #7c3aed; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .fill-main { fill: #7c3aed; }
+      .fill-light { fill: #ede9fe; }
+    </style>
+  </defs>
+  <!-- Soft background circle -->
+  <circle cx="32" cy="32" r="24" class="bg" />
+  <!-- Bust shadow -->
+  <path d="M22 42 C24 38.5 27.5 36.5 32 36.5 C36.5 36.5 40 38.5 42 42" class="fill-light" />
+  <!-- Head -->
+  <circle cx="32" cy="26" r="6" class="fill-light" />
+  <circle cx="32" cy="26" r="6" class="stroke-main" />
+  <!-- Body / shoulders -->
+  <path d="M24 42 C25.5 38 28.3 36.5 32 36.5 C35.7 36.5 38.5 38 40 42" class="stroke-main" />
+  <!-- Neck hint -->
+  <path d="M29 32.5 C30 33.5 31 34 32 34 C33 34 34 33.5 35 32.5" class="stroke-main" />
+  <!-- Gear near the head (upper-right) -->
+  <circle cx="42" cy="22" r="4" class="bg" />
+  <circle cx="42" cy="22" r="4" class="stroke-main" />
+  <!-- Gear teeth -->
+  <line x1="42" y1="16.8" x2="42" y2="18.3" class="stroke-main" />
+  <line x1="42" y1="25.7" x2="42" y2="27.2" class="stroke-main" />
+  <line x1="36.8" y1="22" x2="38.3" y2="22" class="stroke-main" />
+  <line x1="45.7" y1="22" x2="47.2" y2="22" class="stroke-main" />
+  <line x1="38.9" y1="18.9" x2="39.9" y2="19.9" class="stroke-main" />
+  <line x1="44.1" y1="24.1" x2="45.1" y2="25.1" class="stroke-main" />
+  <line x1="38.9" y1="25.1" x2="39.9" y2="24.1" class="stroke-main" />
+  <line x1="44.1" y1="19.9" x2="45.1" y2="18.9" class="stroke-main" />
+  <!-- Gear center -->
+  <circle cx="42" cy="22" r="1.4" class="fill-main" />
+</svg>
+</file>
+
+<file path="public/images/browser-client.svg">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="browser-client.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="9.7812567"
+     inkscape:cx="41.456841"
+     inkscape:cy="27.450461"
+     inkscape:window-width="1448"
+     inkscape:window-height="824"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .bg           { fill: #eef4ff; }      /* soft circular background */
+      .window-bg    { fill: #f9fbff; }      /* inner window fill */
+      .window-stroke{ stroke: #2563eb; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .dot          { fill: #2563eb; }
+      .card-bg      { fill: #dbeafe; }
+      .card-stroke  { stroke: #2563eb; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .shape-fill   { fill: #2563eb; }
+    </style>
+  </defs>
+  <!-- Background circle -->
+  <circle
+     cx="32"
+     cy="32"
+     r="24"
+     class="bg"
+     id="circle1"
+     style="fill:#c6d9ff;fill-opacity:1" />
+  <!-- Browser window -->
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="33.146255"
+     rx="6.9568896"
+     class="window-bg"
+     id="rect1"
+     style="stroke-width:0.894805" />
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="33.146255"
+     rx="6.9568896"
+     class="window-stroke"
+     id="rect2" />
+  <!-- Top bar -->
+  <rect
+     x="16.295879"
+     y="15.375752"
+     width="31.306004"
+     height="10.128023"
+     rx="6.9568896"
+     class="window-stroke"
+     id="rect3" />
+  <line
+     x1="16.295879"
+     y1="25.503777"
+     x2="47.601883"
+     y2="25.503777"
+     class="window-stroke"
+     id="line3" />
+  <!-- Window controls -->
+  <ellipse
+     cx="21.513548"
+     cy="20.900131"
+     class="dot"
+     id="circle3"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <ellipse
+     cx="26.731215"
+     cy="20.900131"
+     class="dot"
+     id="circle4"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <ellipse
+     cx="31.948879"
+     cy="20.900131"
+     class="dot"
+     id="circle5"
+     rx="2.0870669"
+     ry="2.2097507"
+     style="stroke-width:0.894805" />
+  <!-- Image card inside content area -->
+  <rect
+     x="19.774324"
+     y="28.265966"
+     width="24.349113"
+     height="16.573128"
+     rx="3.4784448"
+     class="card-bg"
+     id="rect5"
+     style="stroke-width:0.894805" />
+  <rect
+     x="19.774324"
+     y="28.265966"
+     width="24.349113"
+     height="16.573128"
+     rx="3.4784448"
+     class="card-stroke"
+     id="rect6" />
+  <!-- “Sun” -->
+  <ellipse
+     cx="24.122381"
+     cy="31.948881"
+     class="shape-fill"
+     id="circle6"
+     rx="1.9131447"
+     ry="2.0256047"
+     style="stroke-width:0.894805" />
+  <!-- “Mountains” -->
+  <path
+     d="m 21.513548,42.997635 5.217667,-9.207294 5.217667,9.207294 z"
+     class="shape-fill"
+     id="path6"
+     style="stroke-width:0.894805" />
+  <path
+     d="m 28.470438,42.997635 4.348056,-6.445106 4.348056,6.445106 z"
+     class="shape-fill"
+     id="path7"
+     style="stroke-width:0.894805" />
+</svg>
+</file>
+
+<file path="public/images/naylence.svg">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="400"
+   height="400"
+   viewBox="0 0 400 400"
+   sodipodi:docname="naylence.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#0a706f;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#14a192;stop-opacity:1;"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="202.07256"
+       y1="322.11292"
+       x2="202.07256"
+       y2="86.390778"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.230262,0,0,1.230262,-47.303759,-46.461625)" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.2180684"
+     inkscape:cx="176.91946"
+     inkscape:cy="204.42202"
+     inkscape:window-width="1560"
+     inkscape:window-height="995"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g1" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1">
+    <path
+       style="fill:url(#linearGradient2);stroke-width:1.23022"
+       d="m 165.07933,395.85375 c -3.67258,-8.50429 -4.82957,-15.34408 -4.13256,-24.43015 1.61798,-21.09263 13.46951,-38.49451 37.82252,-55.53583 16.94091,-11.85463 36.22512,-25.66056 36.88725,-26.40828 0.33827,-0.38212 3.27499,-2.83253 6.52589,-5.44542 34.17269,-27.46626 50.67944,-66.33751 43.26958,-101.89411 -2.59398,-12.44713 -7.2957,-21.24931 -15.97872,-29.91423 -8.47933,-8.4616 -19.69582,-14.55562 -30.86229,-16.76775 -23.36966,-4.62972 -47.24393,13.70704 -47.24393,36.28601 0,4.26826 1.47351,9.70296 4.43719,16.36566 1.91927,4.31466 8.30984,10.25092 11.03551,10.25092 0.96302,0 1.75095,0.61606 1.75095,1.36906 0,2.62465 -16.01736,0.65494 -23.76103,-2.92202 -13.24794,-6.11948 -21.83854,-17.71198 -26.04737,-35.14904 -2.33276,-9.66439 -2.05339,-16.77465 1.14079,-29.03798 6.06357,-23.27971 24.27896,-42.100702 49.28282,-50.921264 6.93192,-2.445329 23.01201,-5.134731 30.70134,-5.134731 7.0252,0 24.22631,3.056784 33.27227,5.912859 14.50876,4.580733 29.13222,13.813115 41.07834,25.934456 6.62028,6.71745 18.58935,22.96479 18.58935,25.23407 0,0.37054 1.34762,3.59528 2.99469,7.16614 4.64848,10.07777 6.82731,17.64947 8.75102,30.41098 2.10836,13.98592 2.24778,24.12303 0.49686,36.12878 -4.79029,32.84689 -18.50112,59.99055 -42.38373,83.90801 -20.40451,20.43425 -35.54248,30.4536 -78.0312,51.64666 -23.68531,11.81399 -34.21416,18.76289 -43.00753,28.38428 -8.22707,9.00166 -11.92024,15.67974 -13.56413,24.52674 -0.91433,4.92105 -0.91433,4.92105 -3.02388,0.036 z M 136.00528,279.08174 C 90.955907,265.56073 62.935556,229.1478 57.083842,176.52207 51.001234,121.81981 80.760764,61.428556 128.5965,31.400489 c 13.72198,-8.613733 38.3918,-18.45048 43.15104,-17.205904 1.31959,0.345085 -8.04126,2.743252 -8.36471,2.219946 -1.14125,-1.846575 23.661,-6.284101 39.06588,-6.284101 14.57624,0 22.6799,1.122542 43.08134,5.967801 7.43495,1.765763 27.87453,11.268393 35.05162,16.295919 3.77032,2.641127 7.27243,4.802047 7.78242,4.802047 1.26614,0 21.07029,19.270052 25.2872,24.605238 1.8719,2.368261 4.47122,6.243579 5.77633,8.611835 1.30514,2.368256 3.05926,5.392183 3.89799,6.719812 5.11873,8.102852 6.95042,11.734125 5.91889,11.734125 -0.64521,0 -1.4681,-0.477243 -1.82858,-1.060665 -0.82026,-1.327079 -18.1107,-14.450478 -24.71211,-18.756368 -7.02868,-4.584514 -17.76629,-10.939521 -18.48385,-10.939521 -0.33547,0 -2.9569,-1.03143 -5.82527,-2.292066 -18.80065,-8.262818 -26.49614,-10.101498 -45.66329,-10.910255 -20.77134,-0.876443 -32.59834,1.016621 -49.97614,7.999315 -26.38492,10.601932 -46.42835,32.284497 -55.52909,60.070293 -4.06797,12.41995 -4.05971,36.57818 0.0168,49.70495 7.59607,24.45971 26.18349,43.34654 49.9761,50.78113 12.50372,3.90715 34.66829,3.83698 46.67007,-0.14782 4.6926,-1.55795 9.8882,-3.8995 11.54582,-5.20339 1.65761,-1.30387 3.49281,-2.37072 4.07825,-2.37072 1.91249,0 1.12408,6.21354 -2.16273,17.04577 -3.92904,12.94887 -5.89232,16.91186 -13.56804,27.38797 -10.57224,14.42962 -23.30045,23.40469 -41.02723,28.92977 -12.81363,3.99373 -33.39915,3.98321 -46.74998,-0.0238 z m 44.524,-33.68578 c 7.47236,-2.52672 13.94197,-6.20323 12.84538,-7.29983 -0.36659,-0.36659 -5.10656,-0.0172 -10.53342,0.77625 -20.71576,3.02904 -46.88489,-3.61806 -65.46886,-16.62953 -16.41379,-11.49194 -28.628293,-26.14142 -38.230608,-45.85186 -3.479275,-7.14171 -6.53371,-12.36159 -6.787663,-11.59976 -0.253943,0.76183 0.963322,6.05716 2.705033,11.76737 11.125937,36.47613 34.502208,61.58383 65.063768,69.8831 11.10223,3.01488 29.83092,2.53019 40.40637,-1.04574 z"
+       id="path1"
+       sodipodi:nodetypes="ssssssssssssssssssssssssssssscssssssssssssssssssscsssssssccsssssssss" />
+  </g>
+</svg>
+</file>
+
+<file path="public/images/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="public/images/sentinel.svg">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="sentinel.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.6669335"
+     inkscape:cx="30.792668"
+     inkscape:cy="30.96913"
+     inkscape:window-width="1360"
+     inkscape:window-height="872"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .bg { fill: #e0f7f5; }
+      .shield { stroke: #0f766e; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .house-stroke { stroke: #0f766e; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .house-fill { fill: #ecfeff; }
+    </style>
+  </defs>
+  <!-- Background circle -->
+  <circle
+     cx="32"
+     cy="32"
+     r="24"
+     class="bg"
+     id="circle1" />
+  <!-- Wider, centered shield -->
+  <path
+     class="shield"
+     d="M 32,14.09069 18.326068,22.050383 V 32 c 0,7.959694 4.557977,13.929464 13.673932,17.909311 C 41.115954,45.929464 45.673932,39.959694 45.673932,32 v -9.949617 z"
+     id="path1" />
+  <!-- House (node) moved up inside the shield -->
+  <!-- Roof -->
+  <path
+     d="m 26,28 6,-5 6,5"
+     class="house-stroke"
+     id="path2" />
+  <!-- Body -->
+  <rect
+     x="26"
+     y="28"
+     width="12"
+     height="10"
+     rx="2"
+     class="house-fill"
+     id="rect2" />
+  <rect
+     x="26"
+     y="28"
+     width="12"
+     height="10"
+     rx="2"
+     class="house-stroke"
+     id="rect3" />
+</svg>
+</file>
+
+<file path="public/images/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+</file>
+
+<file path="src/AgentNode.tsx">
+import { useState, useRef, useEffect } from 'react';
+import { useFabric, useFabricEffect } from '@naylence/react';
+import { HelloAgent } from './HelloAgent';
+
+interface AgentNodeProps {
+  onReady?: () => void;
+}
+
+interface ReceivedMessage {
+  message: string;
+  timestamp: number;
+}
+
+export function AgentNode({ onReady }: AgentNodeProps) {
+  const { fabric, error } = useFabric();
+  const [receivedMessages, setReceivedMessages] = useState<ReceivedMessage[]>([]);
+  const [pulseActive, setPulseActive] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollMessagesToBottom = () => {
+    const endEl = messagesEndRef.current;
+    const container = endEl?.parentElement;
+    if (!endEl || !container) return;
+    if (container.scrollHeight <= container.clientHeight) return;
+    container.scrollTop = container.scrollHeight;
+  };
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (receivedMessages.length === 0) return;
+    scrollMessagesToBottom();
+  }, [receivedMessages]);
+
+  useFabricEffect((fabric) => {
+    // Serve the hello agent on a separate node
+    const agent = new HelloAgent();
+    
+    // Set up callback to track received messages
+    agent.setMessageCallback((message: string) => {
+      const timestamp = Date.now();
+      setReceivedMessages(prev => [...prev.slice(-4), { message, timestamp }]);
+      setPulseActive(true);
+      requestAnimationFrame(() => {
+        scrollMessagesToBottom();
+      });
+      // Reset pulse after animation
+      setTimeout(() => setPulseActive(false), 600);
+    });
+    
+    fabric.serve(agent, 'hello@fame.fabric').then(() => {
+      console.log('Hello agent served at: hello@fame.fabric');
+      // Signal that agent is ready
+      onReady?.();
+    });
+  }, []);
+
+  return (
+    <div className="card">
+      <div className="sentinel-icon-container">
+        <img 
+          src="/images/agent.svg" 
+          alt="Agent Node" 
+          className={`sentinel-icon ${pulseActive ? 'pulse-active' : ''}`}
+        />
+        {pulseActive && <div className="pulse-overlay" />}
+      </div>
+      <h2>Agent Node</h2>
+      {error != null && <p className="status-error">Error: {String(error)}</p>}
+      {fabric && (
+        <div>
+          <p className="status-active">✅ Active</p>
+          
+          <div className="messages-container">
+            <p className="messages-title">{receivedMessages.length > 0 ? 'Received Messages:' : '\u00A0'}</p>
+            <div className="messages-list">
+              {receivedMessages.map((msg, idx) => (
+                <div 
+                  key={msg.timestamp}
+                  className={`message-item ${idx === receivedMessages.length - 1 ? 'new' : ''}`}
+                >
+                  <div className="message-text">📨 {msg.message}</div>
+                  <div className="message-timestamp">
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/App.css">
+.App {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.app-logo {
+  display: block;
+  margin: 0 auto 16px;
+  height: 48px;
+  width: auto;
+}
+
+.App > h1 {
+  text-align: center;
+}
+
+.app-description {
+  text-align: center;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0 auto 24px;
+  max-width: 700px;
+}
+
+.app-source {
+  text-align: center;
+  margin: -8px 0 24px;
+}
+
+.app-source a {
+  color: #2b6cb0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-source a:hover {
+  text-decoration: underline;
+}
+
+.nodes-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.nodes-container.three-node {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.arrows-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 180px;
+}
+
+.communication-arrows {
+  display: block;
+  color: #2b6cb0;
+}
+
+@media (max-width: 1200px) {
+  .arrows-container {
+    display: none;
+  }
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 24px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 360px;
+  min-height: 480px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 10px rgba(148, 163, 184, 0.12);
+}
+
+.card h2 {
+  margin: 12px 0;
+  font-size: 20px;
+  color: #2d3748;
+  text-align: center;
+}
+
+.read-the-docs {
+  color: #718096;
+}
+
+/* Sentinel Node Styles */
+.sentinel-icon-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  padding: 30px 0;
+  margin-top: -30px;
+  margin-bottom: -10px;
+}
+
+.sentinel-icon {
+  width: 120px;
+  height: 120px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sentinel-icon.pulse-active {
+  transform: scale(1.1);
+}
+
+.pulse-overlay {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-left: -63px;
+  border-radius: 50%;
+  border: 3px solid #38a169;
+  animation: pulse 0.6s ease-out;
+  pointer-events: none;
+  margin-top: -2px;
+}
+
+.messages-container {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.messages-title {
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.messages-list {
+  margin-top: 12px;
+  min-height: 190px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.message-item {
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: #f0fff4;
+  border-radius: 6px;
+  border-left: 4px solid #38a169;
+  font-size: 14px;
+}
+
+.message-item.new {
+  animation: slideIn 0.3s ease-out;
+}
+
+.message-text {
+  color: #276749;
+  font-weight: 500;
+}
+
+.message-timestamp {
+  color: #718096;
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+}
+
+/* Client Node Styles */
+.client-icon-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  padding: 30px 0;
+  margin-top: -30px;
+  margin-bottom: -10px;
+}
+
+.client-icon {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
+
+.client-input-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.client-input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  font-size: 15px;
+  background: #fdfdfd;
+  font-family: inherit;
+}
+
+.client-input:focus {
+  outline: 2px solid #2b6cb0;
+  outline-offset: 0;
+  border-color: #2b6cb0;
+}
+
+.client-response {
+  margin-top: 12px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid #38a169;
+  background: #f0fff4;
+  color: #276749;
+  font-weight: 500;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 15px;
+}
+
+.status-active {
+  color: #38a169;
+  font-weight: 500;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.status-error {
+  color: #c53030;
+  font-weight: 500;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid #e53e3e;
+  background: #fff5f5;
+  margin: 12px 0;
+}
+
+.node-info {
+  color: #718096;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+</file>
+
+<file path="src/App.tsx">
+import { useState, useEffect } from 'react';
+// Explicitly import the plugin to ensure factory registration happens
+import '@naylence/runtime';
+import { FabricProvider } from '@naylence/react';
+import { SentinelNode } from './SentinelNode';
+import { AgentNode } from './AgentNode';
+import { ClientNode } from './ClientNode';
+import { sentinelConfig, agentConfig, clientConfig } from './config-3node-broadcast';
+
+import './App.css';
+
+function App() {
+  const [sentinelReady, setSentinelReady] = useState(false);
+  const [agentReady, setAgentReady] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
+
+  // Initialize agent after sentinel is ready
+  useEffect(() => {
+    if (sentinelReady) {
+      const timer = setTimeout(() => {
+        setAgentReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [sentinelReady]);
+
+  // Initialize client after agent is ready
+  useEffect(() => {
+    if (agentReady) {
+      const timer = setTimeout(() => {
+        setClientReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [agentReady]);
+
+  return (
+    <div className="App">
+      <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
+      <h1>Naylence React - 3 Node Example</h1>
+      <p className="app-description">
+        This React example demonstrates three fabric nodes (Client → Sentinel → Agent) communicating via BroadcastChannel,
+        running entirely in the browser.
+      </p>
+      <p className="app-source">
+        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello-3node" target="_blank" rel="noreferrer">
+          View source on GitHub
+        </a>
+      </p>
+      
+      <div className="nodes-container three-node">
+        {/* Client - makes requests */}
+        {clientReady && (
+          <FabricProvider opts={clientConfig}>
+            <ClientNode />
+          </FabricProvider>
+        )}
+
+        {/* Arrows between nodes */}
+        <div className="arrows-container">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="64" height="64" viewBox="0 0 64 64"
+               stroke="currentColor" strokeWidth="3"
+               strokeLinecap="round" strokeLinejoin="round" fill="none"
+               className="communication-arrows">
+            {/* Top arrow: left → right */}
+            <line x1="12" y1="22" x2="52" y2="22" />
+            <path d="M46 16 L52 22 L46 28" />
+
+            {/* Bottom arrow: right → left */}
+            <line x1="52" y1="42" x2="12" y2="42" />
+            <path d="M18 36 L12 42 L18 48" />
+          </svg>
+        </div>
+
+        {/* Sentinel - routes messages */}
+        <FabricProvider opts={sentinelConfig}>
+          <SentinelNode onReady={() => setSentinelReady(true)} />
+        </FabricProvider>
+
+        {/* Second set of arrows */}
+        <div className="arrows-container">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="64" height="64" viewBox="0 0 64 64"
+               stroke="currentColor" strokeWidth="3"
+               strokeLinecap="round" strokeLinejoin="round" fill="none"
+               className="communication-arrows">
+            {/* Top arrow: left → right */}
+            <line x1="12" y1="22" x2="52" y2="22" />
+            <path d="M46 16 L52 22 L46 28" />
+
+            {/* Bottom arrow: right → left */}
+            <line x1="52" y1="42" x2="12" y2="42" />
+            <path d="M18 36 L12 42 L18 48" />
+          </svg>
+        </div>
+
+        {/* Agent - processes requests */}
+        {agentReady && (
+          <FabricProvider opts={agentConfig}>
+            <AgentNode onReady={() => console.log('Agent ready')} />
+          </FabricProvider>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+</file>
+
+<file path="src/ClientNode.tsx">
+import { useState } from 'react';
+import { useFabric, useRemoteAgent } from '@naylence/react';
+import type { HelloAgent } from './HelloAgent';
+
+export function ClientNode() {
+  const { fabric, error } = useFabric();
+  const [message, setMessage] = useState('Hello, World!');
+  const [response, setResponse] = useState<string | null>(null);
+  
+  // Use the useRemoteAgent hook to get the agent proxy
+  const helloAgent = useRemoteAgent<HelloAgent>('hello@fame.fabric');
+
+  const sayHello = async () => {
+    if (!helloAgent) return;
+    
+    try {
+      // Call the agent's runTask method
+      const result = await helloAgent.runTask({ message });
+      setResponse(result);
+    } catch (err) {
+      console.error('Agent call failed:', err);
+      alert(`Error: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  };
+
+  return (
+    <div className="card">
+      <div className="client-icon-container">
+        <img src="/images/browser-client.svg" alt="Browser Client" className="client-icon" />
+      </div>
+      <h2>Client</h2>
+      {error != null && <p className="status-error">Error: {String(error)}</p>}
+      {fabric && (
+        <div>
+          <p className="status-active">✅ Connected</p>
+          
+          <div className="client-input-container">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Enter a message"
+              className="client-input"
+              onKeyDown={(e) => e.key === 'Enter' && sayHello()}
+            />
+            <button 
+              onClick={sayHello} 
+              disabled={/*loading || */ !helloAgent}
+            >
+               Send
+            </button>
+          </div>
+          
+          {response && (
+            <div className="client-response">
+              {response}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/config-3node-broadcast.ts">
+import { generateId } from '@naylence/core';
+
+// Generate a unique channel name
+const channelName = `default-${generateId()}`;
+
+// Configuration for Sentinel node (router/coordinator)
+export const sentinelConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      type: 'Sentinel',
+      id: 'sentinel',
+      requestedLogicals: ['fame.fabric'],
+      listeners: [
+        {
+          type: 'BroadcastChannelListener',
+          channelName: channelName
+        },
+      ],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+    },
+  },
+};
+
+// Configuration for Agent node (hosts the agent)
+export const agentConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      id: 'agent',
+      hasParent: true,
+      requestedLogicals: ['fame.fabric'],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+      admission: {
+        type: 'DirectAdmissionClient',
+        connectionGrants: [
+          {
+            type: 'BroadcastChannelConnectionGrant',
+            purpose: 'node.attach',
+            channelName: channelName,
+            ttl: 0,
+            durable: false,
+            initialWindow: 16,
+          },
+        ],
+      },
+    },
+  },
+};
+
+// Configuration for Client node (makes requests)
+export const clientConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      id: 'client',
+      hasParent: true,
+      requestedLogicals: ['fame.fabric'],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+      admission: {
+        type: 'DirectAdmissionClient',
+        connectionGrants: [
+          {
+            type: 'BroadcastChannelConnectionGrant',
+            purpose: 'node.attach',
+            channelName: channelName,
+            ttl: 0,
+            durable: false,
+            initialWindow: 12,
+          },
+        ],
+      },
+    },
+  },
+};
+</file>
+
+<file path="src/config-3node.ts">
+import { generateId } from '@naylence/core';
+
+// Generate a unique channel name
+const channelName = `default-${generateId()}`;
+
+// Configuration for Sentinel node (router/coordinator)
+export const sentinelConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      type: 'Sentinel',
+      id: 'sentinel',
+      requestedLogicals: ['fame.fabric'],
+      listeners: [
+        {
+          type: 'InPageListener',
+          channelName: channelName,
+        },
+      ],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+    },
+  },
+};
+
+// Configuration for Agent node (hosts the agent)
+export const agentConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      id: 'agent',
+      hasParent: true,
+      requestedLogicals: ['fame.fabric'],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+      admission: {
+        type: 'DirectAdmissionClient',
+        connectionGrants: [
+          {
+            type: 'InPageConnectionGrant',
+            purpose: 'node.attach',
+            channelName: channelName, // + '-agent',
+            ttl: 0,
+            durable: false,
+          },
+        ],
+      },
+    },
+  },
+};
+
+// Configuration for Client node (makes requests)
+export const clientConfig = {
+  rootConfig: {
+    plugins: ['@naylence/runtime'],
+    node: {
+      id: 'client',
+      hasParent: true,
+      requestedLogicals: ['fame.fabric'],
+      security: {
+        type: 'DefaultSecurityManager',
+        securityPolicy: {
+          type: 'NoSecurityPolicy',
+        },
+        authorizer: {
+          type: 'NoopAuthorizer',
+        },
+      },
+      admission: {
+        type: 'DirectAdmissionClient',
+        connectionGrants: [
+          {
+            type: 'InPageConnectionGrant',
+            purpose: 'node.attach',
+            channelName: channelName, // + '-client',
+            ttl: 0,
+            durable: false,
+          },
+        ],
+      },
+    },
+  },
+};
+</file>
+
+<file path="src/HelloAgent.ts">
+import { BaseAgent } from '@naylence/agent-sdk';
+
+export class HelloAgent extends BaseAgent {
+  private onMessageReceived?: (message: string) => void;
+
+  setMessageCallback(callback: (message: string) => void) {
+    this.onMessageReceived = callback;
+  }
+
+  async runTask(payload: { message: string }): Promise<string> {
+    const message = payload.message;
+    
+    // Notify that a message was received
+    if (this.onMessageReceived) {
+      this.onMessageReceived(message);
+    }
+    
+    // Echo back the message with a greeting
+    return `You said: "${message}"`;
+  }
+}
+</file>
+
+<file path="src/index.css">
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f7fafc;
+  color: #1a202c;
+}
+
+#root {
+  max-width: 1600px;
+  margin: 40px auto;
+  padding: 0 24px 48px;
+}
+
+a {
+  font-weight: 500;
+  color: #2b6cb0;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #2c5282;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #2d3748;
+}
+
+p {
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(120deg, #2b6cb0, #2c5282);
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(43, 108, 176, 0.28);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  font-family: inherit;
+  will-change: transform;
+}
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(43, 108, 176, 0.34);
+}
+button:active:not(:disabled) {
+  transform: translateY(0);
+  transition: transform 0.05s ease;
+}
+button:disabled {
+  cursor: not-allowed;
+  background: #a0aec0;
+  box-shadow: none;
+  transform: translateY(0);
+}
+button:focus,
+button:focus-visible {
+  outline: 2px solid #2b6cb0;
+  outline-offset: 2px;
+}
+
+code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  background: #ebf8ff;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+</file>
+
+<file path="src/main.tsx">
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
+</file>
+
+<file path="src/SentinelNode.tsx">
+import { useFabric, useFabricEffect } from '@naylence/react';
+
+interface SentinelNodeProps {
+  onReady?: () => void;
+}
+
+export function SentinelNode({ onReady }: SentinelNodeProps) {
+  const { fabric, error } = useFabric();
+
+  useFabricEffect(() => {
+    // Sentinel is ready as soon as fabric is initialized
+    console.log('Sentinel is ready');
+    onReady?.();
+  }, []);
+
+  return (
+    <div className="card">
+      <div className="sentinel-icon-container">
+        <img src="/images/sentinel.svg" alt="Sentinel" className="sentinel-icon" />
+      </div>
+      <h2>Sentinel</h2>
+      {error != null && <p className="status-error">Error: {String(error)}</p>}
+      {fabric && (
+        <div>
+          <p className="status-active">✅ Active</p>
+          <p className="node-info">Routing messages between nodes</p>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+  },
+])
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/naylence.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Naylence React - 3 Node Example</title>
+    <script>
+      // Set logging environment variable before any modules load
+      window.__ENV__ = window.__ENV__ || {};
+      window.__ENV__.FAME_LOG_LEVEL = 'INFO';
+      window.__ENV__.FAME_SHOW_ENVELOPES = 'false';
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="Makefile">
+.DEFAULT_GOAL := run
+
+# Install dependencies
+install:
+	npm install --legacy-peer-deps
+
+# Build the React application
+build: install
+	npm run build
+
+# Start development server
+run: install
+	@echo "🚀 Starting React 3-Node example on http://localhost:5173"
+	npm run dev
+
+# Preview production build
+preview: build
+	@echo "🌐 Previewing production build on http://localhost:4173"
+	npm run preview
+
+# Lint the code
+lint:
+	npm run lint
+
+# Clean build artifacts and node_modules
+clean:
+	@echo "🧹 Cleaning build artifacts"
+	@rm -rf node_modules dist
+
+.PHONY: install build run preview lint clean
+</file>
+
+<file path="package.json">
+{
+  "name": "hello-3node",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@naylence/react": "^0.1.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.28.0",
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.4",
+    "vite": "^7.2.4"
+  }
+}
+</file>
+
+<file path="README.md">
+# Hello App - 3 Node Architecture
+
+This example demonstrates a 3-node Naylence fabric architecture running entirely in the browser—every node stays in the same tab, no backend services required.
+
+View it live at https://naylence-examples-ts-hello-3node.pages.dev
+
+## Architecture
+
+- **Client Node**: Makes requests to the agent service
+- **Sentinel Node**: Routes messages between the client and agent nodes
+- **Agent Node**: Hosts and runs the HelloAgent service
+
+All three nodes communicate via `BroadcastChannel` API in the browser, so you can inspect the full distributed topology with only DevTools open.
+
+## Key Differences from 2-Node Setup
+
+In the 2-node setup (`hello`), the agent runs directly on the sentinel node. In this 3-node setup:
+- The sentinel acts purely as a router/coordinator
+- The agent runs on its own separate node
+- This mirrors distributed backend architectures where agents run on separate services
+
+## Running the Example
+
+```bash
+# Install dependencies
+make install
+
+# Start development server
+make run
+```
+
+Then open your browser to the URL shown (typically http://localhost:5173)
+
+## Available Commands
+
+### Using Make (recommended)
+
+| Command | Description |
+| --- | --- |
+| `make install` | Installs dependencies with npm. |
+| `make run` | Starts the Vite dev server with fast refresh. |
+| `make build` | Type-checks the project and builds the production bundle. |
+| `make preview` | Serves the production build locally for quick smoke tests. |
+| `make lint` | Runs ESLint using the config from `eslint.config.js`. |
+| `make clean` | Removes node_modules and dist directories. |
+
+### Using npm directly
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Starts the Vite dev server with fast refresh. |
+| `npm run build` | Type-checks the project and builds the production bundle. |
+| `npm run preview` | Serves the production build locally for quick smoke tests. |
+| `npm run lint` | Runs ESLint using the config from `eslint.config.js`. |
+
+## How It Works
+
+1. **Sentinel starts first** - Acts as the message router
+2. **Agent connects to sentinel** - Registers the `hello@fame.fabric` service
+3. **Client connects to sentinel** - Can now call the remote agent
+4. **Message flow**: Client → Sentinel → Agent → Sentinel → Client
+
+## Files
+
+- `config-3node.ts` - Configuration for all three node types
+- `ClientNode.tsx` - UI and logic for the client node
+- `SentinelNode.tsx` - UI for the sentinel (pure routing)
+- `AgentNode.tsx` - UI and agent hosting logic
+- `App.tsx` - Orchestrates initialization order
+- `HelloAgent.ts` - Simple echo agent implementation
+
+Because each node is browser-resident, you can open a single page and watch the entire fabric handshake happen client-side—ideal for learning or demos without standing up infrastructure.
+</file>
+
+<file path="tsconfig.app.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* Decorators */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src"]
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+</file>
+
+<file path="tsconfig.node.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+</file>
+
+<file path="vite.config.ts">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          ['@babel/plugin-proposal-decorators', { legacy: true }]
+        ]
+      }
+    })
+  ],
+  resolve: {
+    alias: {
+      // Ensure we use the runtime from this package's node_modules, not nested ones
+      '@naylence/runtime': resolve(__dirname, 'node_modules/@naylence/runtime'),
+      '@naylence/core': resolve(__dirname, 'node_modules/@naylence/core'),
+      '@naylence/factory': resolve(__dirname, 'node_modules/@naylence/factory'),
+      '@naylence/agent-sdk': resolve(__dirname, 'node_modules/@naylence/agent-sdk'),
+    }
+  },
+  optimizeDeps: {
+    exclude: ['@opentelemetry/api']
+  },
+  build: {
+    rollupOptions: {
+      external: ['@opentelemetry/api']
+    }
+  },
+  server: {
+    port: 3000
+  },
+})
+</file>
+
+</files>

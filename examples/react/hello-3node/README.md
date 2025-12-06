@@ -2,7 +2,8 @@
 
 This example demonstrates a 3-node Naylence fabric architecture running entirely in the browser—every node stays in the same tab, no backend services required.
 
-View it live at https://naylence-examples-ts-hello-3node.pages.dev
+**View it live at https://examples-ts-hello-3node.naylence.io**
+
 
 ## Architecture
 

@@ -5,6 +5,8 @@ import { FabricProvider } from '@naylence/react';
 import { SentinelNode } from './SentinelNode';
 import { AgentNode } from './AgentNode';
 import { ClientNode } from './ClientNode';
+import { EnvelopeInspector } from './EnvelopeInspector';
+import { useEnvelopeContext } from './EnvelopeContext';
 import { sentinelConfig, agentConfig, clientConfig } from './config-3node-broadcast';
 
 import './App.css';
@@ -13,6 +15,7 @@ function App() {
   const [sentinelReady, setSentinelReady] = useState(false);
   const [agentReady, setAgentReady] = useState(false);
   const [clientReady, setClientReady] = useState(false);
+  const { debugMode, setDebugMode } = useEnvelopeContext();
 
   // Initialize agent after sentinel is ready
   useEffect(() => {
@@ -36,17 +39,29 @@ function App() {
 
   return (
     <div className="App">
-      <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
-      <h1>Naylence React - 3 Node Example</h1>
-      <p className="app-description">
-        This React example demonstrates three fabric nodes (Client → Sentinel → Agent) communicating via BroadcastChannel,
-        running entirely in the browser.
-      </p>
-      <p className="app-source">
-        <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello-3node" target="_blank" rel="noreferrer">
-          View source on GitHub
-        </a>
-      </p>
+      <div className="app-header">
+        <h1 className="app-title">
+          <img src="/images/naylence.svg" alt="Naylence" className="app-logo" />
+          Naylence React - 3 Node Example
+        </h1>
+        <p className="app-description">
+          This React example demonstrates three fabric nodes (Client → Sentinel → Agent) communicating via BroadcastChannel,
+          running entirely in the browser.
+        </p>
+        <p className="app-source">
+          <a href="https://github.com/naylence/naylence-examples-ts/tree/main/examples/react/hello-3node" target="_blank" rel="noreferrer">
+            View source on GitHub
+          </a>
+          {' • '}
+          <button 
+            onClick={() => setDebugMode(!debugMode)} 
+            className="link-button"
+            style={{ fontSize: 'inherit' }}
+          >
+            {debugMode ? 'Disable Debug' : 'Enable Debug'}
+          </button>
+        </p>
+      </div>
       
       <div className="nodes-container three-node">
         {/* Client - makes requests */}
@@ -102,6 +117,8 @@ function App() {
           </FabricProvider>
         )}
       </div>
+
+      <EnvelopeInspector />
     </div>
   );
 }

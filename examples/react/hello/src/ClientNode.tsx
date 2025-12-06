@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { useFabric, useRemoteAgent } from '@naylence/react';
 import type { HelloAgent } from './HelloAgent';
+import { useNodeEnvelopeLogger } from './useNodeEnvelopeLogger';
+import { useEnvelopeContext } from './EnvelopeContext';
 
 export function ClientNode() {
   const { fabric, error } = useFabric();
   const [message, setMessage] = useState('Hello, World!');
   const [response, setResponse] = useState<string | null>(null);
   
+  const nodeId = 'Client';
+  useNodeEnvelopeLogger(nodeId);
+  const { selectedNodeId, setSelectedNodeId } = useEnvelopeContext();
+  const isSelected = selectedNodeId === nodeId;
+
   // Use the useRemoteAgent hook to get the agent proxy
   const helloAgent = useRemoteAgent<HelloAgent>('hello@fame.fabric');
 
@@ -27,7 +34,10 @@ export function ClientNode() {
   };
 
   return (
-    <div className="card">
+    <div 
+      className={`card ${isSelected ? 'selected' : ''}`}
+      onClick={() => setSelectedNodeId(nodeId)}
+    >
       <div className="client-icon-container">
         <img src="/images/browser-client.svg" alt="Browser Client" className="client-icon" />
       </div>

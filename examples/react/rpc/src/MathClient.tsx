@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useFabric, useRemoteAgent } from '@naylence/react';
 import type { MathAgent } from './MathAgent';
+import { useNodeEnvelopeLogger } from './useNodeEnvelopeLogger';
+import { useEnvelopeContext } from './EnvelopeContext';
 
 export function MathClient() {
   const { fabric, error } = useFabric();
@@ -11,6 +13,11 @@ export function MathClient() {
   
   // Use the useRemoteAgent hook to get the agent proxy
   const mathAgent = useRemoteAgent<MathAgent>('math@fame.fabric');
+
+  // Enable envelope logging
+  useNodeEnvelopeLogger('client');
+  const { selectedNodeId, setSelectedNodeId } = useEnvelopeContext();
+  const isSelected = selectedNodeId === 'client';
 
   const handleAdd = async () => {
     if (!mathAgent) return;
@@ -55,7 +62,13 @@ export function MathClient() {
   };
 
   return (
-    <div className="card">
+    <div 
+      className={`card ${isSelected ? 'selected' : ''}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelectedNodeId(isSelected ? null : 'client');
+      }}
+    >
       <div className="client-icon-container">
         <img src="/images/browser-client.svg" alt="Browser Client" className="client-icon" />
       </div>
@@ -73,6 +86,7 @@ export function MathClient() {
                 value={x}
                 onChange={(e) => setX(Number(e.target.value))}
                 className="client-input"
+                onClick={(e) => e.stopPropagation()}
               />
             </div>
             
@@ -83,18 +97,19 @@ export function MathClient() {
                 value={y}
                 onChange={(e) => setY(Number(e.target.value))}
                 className="client-input"
+                onClick={(e) => e.stopPropagation()}
               />
             </div>
             
             <div className="button-group">
               <button 
-                onClick={handleAdd} 
+                onClick={(e) => { e.stopPropagation(); handleAdd(); }} 
                 disabled={/*addLoading || */ !mathAgent}
               >
                 Add
               </button>
               <button 
-                onClick={handleMultiply} 
+                onClick={(e) => { e.stopPropagation(); handleMultiply(); }} 
                 disabled={/*multiplyLoading || */ !mathAgent}
               >
                 Multiply
@@ -108,11 +123,12 @@ export function MathClient() {
                 value={n}
                 onChange={(e) => setN(Number(e.target.value))}
                 className="client-input"
+                onClick={(e) => e.stopPropagation()}
               />
             </div>
             
             <button 
-              onClick={handleFibStream} 
+              onClick={(e) => { e.stopPropagation(); handleFibStream(); }} 
               disabled={/*fibLoading || */ !mathAgent}
               className="fib-button"
             >

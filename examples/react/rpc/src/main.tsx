@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { enableLogging } from '@naylence/runtime'
+import { EnvelopeProvider } from './EnvelopeContext'
 import './index.css'
 import App from './App.tsx'
 
@@ -9,6 +10,8 @@ enableLogging('debug');
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <EnvelopeProvider>
+      <App />
+    </EnvelopeProvider>
   </StrictMode>,
 )

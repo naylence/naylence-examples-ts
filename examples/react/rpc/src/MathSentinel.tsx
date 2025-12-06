@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useFabric, useFabricEffect } from '@naylence/react';
 import { MathAgent } from './MathAgent';
+import { useNodeEnvelopeLogger } from './useNodeEnvelopeLogger';
+import { useEnvelopeContext } from './EnvelopeContext';
 
 interface MathSentinelProps {
   onReady?: () => void;
@@ -19,6 +21,11 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
   const [operationLogs, setOperationLogs] = useState<OperationLog[]>([]);
   const [pulseActive, setPulseActive] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Enable envelope logging
+  useNodeEnvelopeLogger('sentinel');
+  const { selectedNodeId, setSelectedNodeId } = useEnvelopeContext();
+  const isSelected = selectedNodeId === 'sentinel';
 
   // Auto-scroll to bottom when new logs arrive
   useEffect(() => {
@@ -72,7 +79,6 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
     fabric
       .serve(agent, 'math@fame.fabric')
       .then(() => {
-        console.log('[MathSentinel]', agentId, 'served at math@fame.fabric');
         onReady?.();
       })
       .catch((serveError) => {
@@ -81,7 +87,13 @@ export function MathSentinel({ onReady }: MathSentinelProps) {
   }, []);
 
   return (
-    <div className="card">
+    <div 
+      className={`card ${isSelected ? 'selected' : ''}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelectedNodeId(isSelected ? null : 'sentinel');
+      }}
+    >
       <div className="sentinel-icon-container">
         <img 
           src="/images/agent-on-sentinel.svg" 

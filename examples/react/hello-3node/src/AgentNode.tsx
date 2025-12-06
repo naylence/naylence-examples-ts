@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useFabric, useFabricEffect } from '@naylence/react';
 import { HelloAgent } from './HelloAgent';
+import { useNodeEnvelopeLogger } from './useNodeEnvelopeLogger';
+import { useEnvelopeContext } from './EnvelopeContext';
 
 interface AgentNodeProps {
   onReady?: () => void;
@@ -16,6 +18,11 @@ export function AgentNode({ onReady }: AgentNodeProps) {
   const [receivedMessages, setReceivedMessages] = useState<ReceivedMessage[]>([]);
   const [pulseActive, setPulseActive] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const nodeId = 'Agent';
+  useNodeEnvelopeLogger(nodeId);
+  const { selectedNodeId, setSelectedNodeId } = useEnvelopeContext();
+  const isSelected = selectedNodeId === nodeId;
 
   const scrollMessagesToBottom = () => {
     const endEl = messagesEndRef.current;
@@ -48,14 +55,16 @@ export function AgentNode({ onReady }: AgentNodeProps) {
     });
     
     fabric.serve(agent, 'hello@fame.fabric').then(() => {
-      console.log('Hello agent served at: hello@fame.fabric');
       // Signal that agent is ready
       onReady?.();
     });
   }, []);
 
   return (
-    <div className="card">
+    <div 
+      className={`card ${isSelected ? 'selected' : ''}`}
+      onClick={() => setSelectedNodeId(nodeId)}
+    >
       <div className="sentinel-icon-container">
         <img 
           src="/images/agent.svg" 
