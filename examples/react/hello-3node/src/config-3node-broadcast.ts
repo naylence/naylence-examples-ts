@@ -10,7 +10,6 @@ export const sentinelConfig = {
     plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
-      id: `sentinel-${pageId}`,
       requestedLogicals: ['fame.fabric'],
       listeners: [
         {
@@ -36,7 +35,6 @@ export const agentConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: `agent-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
@@ -70,7 +68,6 @@ export const clientConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: `client-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {

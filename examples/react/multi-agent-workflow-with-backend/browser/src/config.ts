@@ -41,6 +41,10 @@ export const clientConfig = {
           },
         ],
       },
+      delivery: {
+        type: 'DeliveryProfile' as const,
+        profile: 'at-most-once',
+      },
     },
   },
 };

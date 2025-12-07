@@ -1,12 +1,11 @@
 x-config: &config
-  version: &base-version "0.3.5"
-  base-image: &base-image naylence/agent-sdk-node:0.3.5
+  version: &base-version "0.3.11"
+  base-image: &base-image naylence/agent-sdk-node:0.3.11
 
 x-common-base: &common-base
-  build:
-    context: .
-    dockerfile: Dockerfile
   image: *base-image
+  user: agent
+  working_dir: /app
   volumes:
     - ./dist:/app
     - /app/node_modules

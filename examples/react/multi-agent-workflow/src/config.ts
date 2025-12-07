@@ -44,25 +44,12 @@ export const sentinelConfig = {
     plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
-      id: `sentinel-${pageId}`,
       requestedLogicals: ['fame.fabric'],
       listeners: [
         {
           type: 'BroadcastChannelListener',
           channelName: channelName,
         },
-        // {
-        //   type: 'BroadcastChannelListener',
-        //   channelName: channelNameWorkflow,
-        // },
-        // {
-        //   type: 'BroadcastChannelListener',
-        //   channelName: channelNameStats,
-        // },
-        // {
-        //   type: 'BroadcastChannelListener',
-        //   channelName: channelNameKeywords,
-        // },
       ],
       security: {
         type: 'DefaultSecurityManager',
@@ -82,7 +69,6 @@ export const clientConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: `client-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
@@ -111,12 +97,11 @@ export const clientConfig = {
 };
 
 // Configuration factory for agent nodes
-function createAgentConfig(id: string, agentChannelName: string = channelName) {
+function createAgentConfig(agentChannelName: string = channelName) {
   return {
     rootConfig: {
       plugins: ['@naylence/runtime'],
       node: {
-        id: id,
         hasParent: true,
         requestedLogicals: ['fame.fabric'],
         security: {
@@ -145,7 +130,7 @@ function createAgentConfig(id: string, agentChannelName: string = channelName) {
   };
 }
 
-export const workflowAgentConfig = createAgentConfig('workflow-agent-' + pageId);
-export const statsAgentConfig = createAgentConfig('stats-agent-' + pageId);
-export const keywordsAgentConfig = createAgentConfig('keywords-agent-' + pageId);
-export const sentencesAgentConfig = createAgentConfig('sentences-agent-' + pageId);
+export const workflowAgentConfig = createAgentConfig();
+export const statsAgentConfig = createAgentConfig();
+export const keywordsAgentConfig = createAgentConfig();
+export const sentencesAgentConfig = createAgentConfig();
