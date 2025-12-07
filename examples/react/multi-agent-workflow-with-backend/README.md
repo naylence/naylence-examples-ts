@@ -49,7 +49,7 @@ The sentinel will be available at `ws://localhost:8000`.
 In a separate terminal:
 
 ```bash
-make run-frontend
+make run-browser
 ```
 
 The React app will be available at `http://localhost:3000`.
