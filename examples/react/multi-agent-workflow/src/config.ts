@@ -1,10 +1,9 @@
 import { generateId } from '@naylence/core';
 
+const pageId = generateId();
+
 // Generate a unique channel name
-const channelName = `multi-agent-${generateId()}`;
-const channelNameWorkflow = `multi-agent-workflow-${generateId()}`;
-const channelNameStats = `multi-agent-stats-${generateId()}`;
-const channelNameKeywords = `multi-agent-keywords-stats-${generateId()}`;
+const channelName = `multi-agent-${pageId}`;
 
 // ===== Common Types =====
 
@@ -45,25 +44,25 @@ export const sentinelConfig = {
     plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
-      id: 'sentinel',
+      id: `sentinel-${pageId}`,
       requestedLogicals: ['fame.fabric'],
       listeners: [
         {
           type: 'BroadcastChannelListener',
           channelName: channelName,
         },
-        {
-          type: 'BroadcastChannelListener',
-          channelName: channelNameWorkflow,
-        },
-        {
-          type: 'BroadcastChannelListener',
-          channelName: channelNameStats,
-        },
-        {
-          type: 'BroadcastChannelListener',
-          channelName: channelNameKeywords,
-        },
+        // {
+        //   type: 'BroadcastChannelListener',
+        //   channelName: channelNameWorkflow,
+        // },
+        // {
+        //   type: 'BroadcastChannelListener',
+        //   channelName: channelNameStats,
+        // },
+        // {
+        //   type: 'BroadcastChannelListener',
+        //   channelName: channelNameKeywords,
+        // },
       ],
       security: {
         type: 'DefaultSecurityManager',
@@ -83,7 +82,7 @@ export const clientConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: 'client',
+      id: `client-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
@@ -146,7 +145,7 @@ function createAgentConfig(id: string, agentChannelName: string = channelName) {
   };
 }
 
-export const workflowAgentConfig = createAgentConfig('workflow-agent');
-export const statsAgentConfig = createAgentConfig('stats-agent');
-export const keywordsAgentConfig = createAgentConfig('keywords-agent');
-export const sentencesAgentConfig = createAgentConfig('sentences-agent');
+export const workflowAgentConfig = createAgentConfig('workflow-agent-' + pageId);
+export const statsAgentConfig = createAgentConfig('stats-agent-' + pageId);
+export const keywordsAgentConfig = createAgentConfig('keywords-agent-' + pageId);
+export const sentencesAgentConfig = createAgentConfig('sentences-agent-' + pageId);

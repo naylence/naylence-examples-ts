@@ -1,7 +1,9 @@
 import { generateId } from '@naylence/core';
 
-// Generate a unique channel name
-const channelName = `default-${generateId()}`;
+// Generate a unique page name
+const pageId = generateId();
+
+const channelName = `default-${pageId}`;
 
 // Configuration for Sentinel node (router/coordinator)
 export const sentinelConfig = {
@@ -9,7 +11,7 @@ export const sentinelConfig = {
     plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
-      id: 'sentinel',
+      id: `sentinel-${pageId}`,
       requestedLogicals: ['fame.fabric'],
       listeners: [
         {
@@ -35,7 +37,7 @@ export const agentConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: 'agent',
+      id: `agent-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
@@ -68,7 +70,7 @@ export const clientConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: 'client',
+      id: `client-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
