@@ -1,8 +1,3 @@
-import { generateId } from '@naylence/core';
-
-// Generate a unique page name
-const pageId = generateId();
-
 // Get WebSocket URL from env.js
 declare global {
   interface Window {
@@ -17,7 +12,6 @@ export const clientConfig = {
   rootConfig: {
     plugins: ['@naylence/runtime'],
     node: {
-      id: `browser-client-${pageId}`,
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
       security: {
