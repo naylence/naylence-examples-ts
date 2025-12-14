@@ -5,7 +5,7 @@ import { KEYWORDS_AGENT_ADDR, KeywordsResult } from "./common.js";
 class KeywordsAgent extends BaseAgent {
   async runTask(payload: { text: string }): Promise<KeywordsResult> {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 250));
+    await new Promise(resolve => setTimeout(resolve, 150));
     
     const text = payload.text || '';
     

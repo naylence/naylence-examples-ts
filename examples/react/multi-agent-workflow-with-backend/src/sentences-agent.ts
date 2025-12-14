@@ -5,7 +5,7 @@ import { SENTENCES_AGENT_ADDR, SentencesResult } from "./common.js";
 class SentencesAgent extends BaseAgent {
   async runTask(payload: { text: string }): Promise<SentencesResult> {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     const text = payload.text || '';
     

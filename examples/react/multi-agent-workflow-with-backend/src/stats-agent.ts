@@ -5,7 +5,7 @@ import { STATS_AGENT_ADDR, TextStats } from "./common.js";
 class StatsAgent extends BaseAgent {
   async runTask(payload: { text: string }): Promise<TextStats> {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 250));
+    await new Promise(resolve => setTimeout(resolve, 150));
     
     const text = payload.text || '';
     

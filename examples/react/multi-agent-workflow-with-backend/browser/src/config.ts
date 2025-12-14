@@ -10,7 +10,6 @@ const WEBSOCKET_URL = window.WEBSOCKET_URL || 'ws://localhost:8000/fame/v1/attac
 // Configuration for Client node connecting to backend sentinel via WebSocket
 export const clientConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       hasParent: true,
       requestedLogicals: ['fame.fabric'],

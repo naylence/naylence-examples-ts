@@ -1,4 +1,3 @@
-import '@naylence/runtime';
 import { FabricProvider } from '@naylence/react';
 import { ClientNode } from './ClientNode';
 import { EnvelopeInspector } from './EnvelopeInspector';
