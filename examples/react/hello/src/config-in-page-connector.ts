@@ -4,7 +4,6 @@ const channelName = 'default';
 // Configuration for Sentinel node (server)
 export const sentinelConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
       id: 'sentinel',
@@ -31,7 +30,6 @@ export const sentinelConfig = {
 // Configuration for Client node
 export const clientConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       id: 'client',
       hasParent: true,
