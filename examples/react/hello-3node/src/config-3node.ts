@@ -8,7 +8,6 @@ const channelName = `default-${pageId}`;
 // Configuration for Sentinel node (router/coordinator)
 export const sentinelConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
       requestedLogicals: ['fame.fabric'],
@@ -34,7 +33,6 @@ export const sentinelConfig = {
 // Configuration for Agent node (hosts the agent)
 export const agentConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
@@ -66,7 +64,6 @@ export const agentConfig = {
 // Configuration for Client node (makes requests)
 export const clientConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
