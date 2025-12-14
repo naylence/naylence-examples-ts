@@ -1,8 +1,7 @@
 .PHONY: init build start stop run run-verbose run-browser clean help
 
 # Docker image for Naylence Agent SDK with Advanced Security
-DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.5
-
+DOCKER_IMAGE := naylence/agent-sdk-adv-node:0.3.12
 .DEFAULT_GOAL := help
 
 # Initialize: generate certificates and secrets

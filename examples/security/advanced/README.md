@@ -215,7 +215,15 @@ Interact with the strict overlay fabric directly from the browser using the PKCE
   make run-browser
   ```
 
-4. Open <http://localhost:3000>. The runtime will
+4. Open <http://localhost:3000>. You will be redirected to the example login page.
+
+   **Login Credentials (Dev Only):**
+   - **Username:** `demo`
+   - **Password:** `naylence`
+
+   > ⚠️ **Warning:** This is a development-only setup with a local OAuth2 server. Do NOT use these credentials or this configuration in production.
+
+   The runtime will
   - perform OAuth2 PKCE to the development IdP,
   - download the Naylence trust bundle from `/.well-known/naylence/trust-bundle.json` (TOFU enabled),
   - request a SPIFFE certificate from the CA service, and

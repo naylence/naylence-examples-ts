@@ -9,8 +9,8 @@
     "preview": "vite preview --host"
   },
   "dependencies": {
-    "@naylence/advanced-security": "0.3.11",
-    "@naylence/agent-sdk": "0.3.5"
+    "@naylence/agent-sdk": "^0.3.12",
+    "@naylence/advanced-security": "^0.3.15"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

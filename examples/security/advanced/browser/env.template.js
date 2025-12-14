@@ -23,7 +23,6 @@
     FAME_JWT_ALGORITHM: "EdDSA",
     FAME_CA_SERVICE_URL: caBase,
     FAME_CA_CERTS: trustBundleUrl,
-    FAME_CA_ALLOW_TOFU: "true",
-    FAME_PLUGINS: "@naylence/runtime,@naylence/advanced-security"
+    FAME_CA_ALLOW_TOFU: "true"
   };
 })();

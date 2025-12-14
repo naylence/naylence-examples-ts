@@ -9,6 +9,8 @@
  * 5. Makes RPC calls to the math agent over sealed channels
  */
 
+// Import advanced-security to install the plugin loader before any plugin loading happens
+
 import { Agent, CLIENT_CONFIG } from "@naylence/agent-sdk";
 import { withFabric } from "@naylence/runtime";
 import { AGENT_ADDR } from "./common.js";
