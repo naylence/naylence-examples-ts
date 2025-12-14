@@ -21,19 +21,19 @@
     "lint:fix": "eslint \"examples/**/*.ts\" --fix",
     "format": "prettier --write \"examples/**/*.{ts,js,json,md}\"",
     "format:check": "prettier --check \"examples/**/*.{ts,js,json,md}\"",
-    "example:llm:qa": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx examples/llm/llm-agent.ts",
-    "example:llm:chat": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx examples/llm/chat-agent.ts",
-    "example:simple:function": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/function-as-agent.ts",
-    "example:simple:echo": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/echo-agent.ts",
-    "example:simple:bg-task": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/agent-with-bg-task.ts",
-    "example:simple:rpc": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/rpc-agent.ts",
-    "example:simple:a2a": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/a2a-agent.ts",
-    "example:simple:ping-pong": "cross-env FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/agent-ping-pong.ts",
-    "example:simple:hello": "cross-env FAME_LOG_LEVEL=WARN FAME_PLUGINS=@naylence/runtime,@naylence/agent-sdk tsx --tsconfig examples/simple/tsconfig.json examples/simple/hello.ts"
+    "example:llm:qa": "tsx examples/llm/llm-agent.ts",
+    "example:llm:chat": "tsx examples/llm/chat-agent.ts",
+    "example:simple:function": "tsx examples/simple/function-as-agent.ts",
+    "example:simple:echo": "tsx examples/simple/echo-agent.ts",
+    "example:simple:bg-task": "tsx examples/simple/agent-with-bg-task.ts",
+    "example:simple:rpc": "tsx --tsconfig examples/simple/tsconfig.json examples/simple/rpc-agent.ts",
+    "example:simple:a2a": "tsx examples/simple/a2a-agent.ts",
+    "example:simple:ping-pong": "tsx examples/simple/agent-ping-pong.ts",
+    "example:simple:hello": "tsx examples/simple/hello.ts"
   },
   "dependencies": {
-    "@naylence/advanced-security": "^0.3.11",
-    "@naylence/agent-sdk": "^0.3.5",
+    "@naylence/advanced-security": "^0.3.14",
+    "@naylence/react": "^0.1.6",
     "openai": "^4.65.0"
   },
   "devDependencies": {
