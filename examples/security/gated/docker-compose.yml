@@ -1,6 +1,6 @@
 x-config: &config
-  version: &base-version "0.3.5"
-  base-image: &base-image naylence/agent-sdk-node:0.3.5
+  version: &base-version "0.3.12"
+  base-image: &base-image naylence/agent-sdk-node:0.3.12
 
 x-common-base: &common-base
   image: *base-image

@@ -14,7 +14,6 @@
     FAME_ADMISSION_CLIENT_ID: "${FAME_ADMISSION_CLIENT_ID}",
     FAME_JWT_AUDIENCE: "fame.fabric",
     FAME_JWT_TRUSTED_ISSUER: "https://oauth2-server",
-    FAME_JWT_ALGORITHM: "EdDSA",
-    FAME_PLUGINS: "@naylence/runtime"
+    FAME_JWT_ALGORITHM: "EdDSA"
   };
 })();

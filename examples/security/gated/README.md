@@ -130,6 +130,36 @@ This shows:
 2. `multiply(6, 7)` → `42`
 3. `fib_stream(10)` → Fibonacci sequence
 
+### Run the Browser Client (PKCE)
+
+Interact with the gated fabric directly from the browser using the PKCE flow:
+
+1. Ensure the stack is running (`make start`) and the development Caddy root certificate is trusted on your system (`https://localhost:8443`).
+2. Generate secrets if you have not already:
+
+  ```bash
+  make init
+  ```
+
+3. Launch the browser client:
+
+  ```bash
+  make run-browser
+  ```
+
+4. Open <http://localhost:3000>. You will be redirected to the example login page.
+
+   **Login Credentials (Dev Only):**
+   - **Username:** `demo`
+   - **Password:** `naylence`
+
+   > ⚠️ **Warning:** This is a development-only setup with a local OAuth2 server. Do NOT use these credentials or this configuration in production.
+
+   The runtime will:
+   - perform OAuth2 PKCE to the development IdP,
+   - connect to the sentinel with gated security, and
+   - execute math RPCs against the fabric.
+
 ### Run with Verbose Logging
 
 For detailed admission and JWT validation logs:
