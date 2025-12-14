@@ -41,7 +41,6 @@ export const SENTENCES_AGENT_ADDR = 'sentences@fame.fabric';
 // Configuration for Sentinel node (router/coordinator)
 export const sentinelConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       type: 'Sentinel',
       requestedLogicals: ['fame.fabric'],
@@ -67,7 +66,6 @@ export const sentinelConfig = {
 // Configuration for Client node (makes requests)
 export const clientConfig = {
   rootConfig: {
-    plugins: ['@naylence/runtime'],
     node: {
       hasParent: true,
       requestedLogicals: ['fame.fabric'],
@@ -100,7 +98,6 @@ export const clientConfig = {
 function createAgentConfig(agentChannelName: string = channelName) {
   return {
     rootConfig: {
-      plugins: ['@naylence/runtime'],
       node: {
         hasParent: true,
         requestedLogicals: ['fame.fabric'],

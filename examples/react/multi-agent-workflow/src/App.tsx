@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-// Explicitly import the plugin to ensure factory registration happens
-import '@naylence/runtime';
 import { FabricProvider } from '@naylence/react';
 import { SentinelNode } from './SentinelNode';
 import { AgentNode } from './AgentNode';
